@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { View, Text, Input, Picker, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import CityPicker, { type SelectedCity } from '../../components/CityPicker'
+import ShareCard from '../../components/ShareCard'
 import { calcPension, type PensionResult } from '../../utils/pension'
 import './index.scss'
 
@@ -13,10 +14,19 @@ export default function Pension() {
   const [salary, setSalary] = useState('')
   const [conYears, setConYears] = useState('')
   const [deemedYears, setDeemedYears] = useState('0')
-  const [indexIdx, setIndexIdx] = useState(2) // 默认100%
+  const [indexIdx, setIndexIdx] = useState(2)
   const [accountBal, setAccountBal] = useState('')
   const [retireAge, setRetireAge] = useState('60')
   const [result, setResult] = useState<PensionResult | null>(null)
+
+  const shareRows = result ? [
+    { label: '基础养老金（统筹账户）', value: `¥${result.basicPension.toLocaleString()}/月` },
+    { label: '个人账户养老金', value: `¥${result.accountPension.toLocaleString()}/月` },
+    ...(result.transitionPension > 0
+      ? [{ label: '过渡性养老金', value: `¥${result.transitionPension.toLocaleString()}/月` }]
+      : []),
+    { label: '月养老金合计', value: `¥${result.totalPension.toLocaleString()}/月`, highlight: true },
+  ] : []
 
   const handleCalc = () => {
     if (!city) { Taro.showToast({ title: '请选择城市', icon: 'none' }); return }
@@ -35,10 +45,6 @@ export default function Pension() {
       retireAge: Number(retireAge),
       transitionRatio: city.transitionRatio
     }))
-  }
-
-  const handleShare = () => {
-    Taro.showShareMenu({ showShareItems: ['wechatFriends', 'wechatMoment'] })
   }
 
   return (
@@ -153,9 +159,11 @@ export default function Pension() {
             养老金遵循"多缴多得、长缴多得"原则。
           </View>
 
-          <Button className='btn-share' openType='share' onClick={handleShare}>
-            分享给朋友
-          </Button>
+          <ShareCard
+            title='社保养老金计算结果'
+            rows={shareRows}
+            tip='以上为估算结果，实际金额以当地社保机构核定为准'
+          />
         </View>
       )}
     </View>

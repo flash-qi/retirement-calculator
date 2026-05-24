@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { View, Text, Picker, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { calcRetireAge, type Gender, type JobType, type RetireAgeResult } from '../../utils/retireAge'
+import { calcRetireAge, type JobType, type RetireAgeResult } from '../../utils/retireAge'
+import ShareCard from '../../components/ShareCard'
 import './index.scss'
 
 const jobOptions: { label: string; value: JobType }[] = [
@@ -27,10 +28,6 @@ export default function RetireAge() {
       return
     }
     setResult(calcRetireAge(d, jobType))
-  }
-
-  const handleShare = () => {
-    Taro.showShareMenu({ showShareItems: ['wechatFriends', 'wechatMoment'] })
   }
 
   return (
@@ -105,9 +102,18 @@ export default function RetireAge() {
           <View className='result-tip'>
             符合条件可选择弹性提前退休（最多提前3年）或弹性延迟退休（最多延迟3年）
           </View>
-          <Button className='btn-share' openType='share' onClick={handleShare}>
-            分享给朋友
-          </Button>
+          <ShareCard
+            title='延迟退休年龄查询结果'
+            rows={[
+              { label: '原法定退休年龄', value: `${result.originalAge}周岁` },
+              { label: '原退休时间', value: result.originalDate },
+              { label: '延迟月数', value: `${result.delayMonths}个月`, highlight: true },
+              { label: '实际退休年龄', value: result.actualAge, highlight: true },
+              { label: '实际退休时间', value: result.actualDate, highlight: true },
+              { label: '最低缴费年限', value: `${result.minContributionYears}年` },
+            ]}
+            tip='符合条件可选择弹性提前退休或延迟退休'
+          />
         </View>
       )}
     </View>

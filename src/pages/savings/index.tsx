@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { View, Text, Input, Picker, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import ShareCard from '../../components/ShareCard'
 import { calcSavings, type SavingsResult } from '../../utils/savings'
 import './index.scss'
 
@@ -12,9 +13,16 @@ export default function Savings() {
   const [retireAge, setRetireAge] = useState('')
   const [currentSavings, setCurrentSavings] = useState('')
   const [monthlyDeposit, setMonthlyDeposit] = useState('')
-  const [returnIdx, setReturnIdx] = useState(1) // 默认稳健4%
+  const [returnIdx, setReturnIdx] = useState(1)
   const [lifeExpectancy, setLifeExpectancy] = useState('85')
   const [result, setResult] = useState<SavingsResult | null>(null)
+
+  const shareRows = result ? [
+    { label: '距离退休', value: `${result.workingYears}年` },
+    { label: '退休生活时长', value: `${result.retirementYears}年` },
+    { label: '退休时总资产', value: `¥${result.totalAtRetirement.toLocaleString()}`, highlight: true },
+    { label: '退休后每月可支配', value: `¥${result.monthlyWithdrawal.toLocaleString()}`, highlight: true },
+  ] : []
 
   const handleCalc = () => {
     if (!currentAge) { Taro.showToast({ title: '请输入当前年龄', icon: 'none' }); return }
@@ -37,10 +45,6 @@ export default function Savings() {
       annualReturn: returnValues[returnIdx],
       lifeExpectancy: Number(lifeExpectancy)
     }))
-  }
-
-  const handleShare = () => {
-    Taro.showShareMenu({ showShareItems: ['wechatFriends', 'wechatMoment'] })
   }
 
   return (
@@ -146,9 +150,11 @@ export default function Savings() {
             建议退休后每月支出不超过退休前收入的70%-80%。
           </View>
 
-          <Button className='btn-share' openType='share' onClick={handleShare}>
-            分享给朋友
-          </Button>
+          <ShareCard
+            title='退休储蓄规划结果'
+            rows={shareRows}
+            tip='简化估算，未扣除通货膨胀影响。建议退休后每月支出不超过退休前收入的70%-80%'
+          />
         </View>
       )}
     </View>
