@@ -1,82 +1,93 @@
 .home {
-  padding: 24px;
+  padding: 0 16px 40px;
   min-height: 100vh;
 }
 
 .hero {
   text-align: center;
-  padding: 80px 0 48px;
+  padding: 48px 0 32px;
+}
+
+.hero-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #3B82F6, #06B6D4);
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .hero-title {
   display: block;
-  font-size: 48px;
-  font-weight: 800;
-  color: #1a1a1a;
-  letter-spacing: 2px;
+  font-size: 44px;
+  font-weight: 700;
+  color: #1A1A2E;
 }
 
 .hero-sub {
   display: block;
-  font-size: 28px;
-  color: #999;
-  margin-top: 16px;
+  font-size: 26px;
+  color: #94A3B8;
+  margin-top: 8px;
 }
 
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.menu-item {
+.menu-card {
   display: flex;
   align-items: center;
   background: #fff;
-  border-radius: 16px;
-  padding: 32px 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  transition: transform 0.15s ease;
-
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
+  border-radius: 20px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
 }
 
-.menu-icon {
-  font-size: 48px;
-  margin-right: 20px;
+.menu-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  margin-right: 16px;
+
+  &.n1 { background: #3B82F6; }
+  &.n2 { background: #2563EB; }
+  &.n3 { background: #06B6D4; }
 }
 
-.menu-text {
+.menu-info {
   flex: 1;
 }
 
-.menu-title {
+.menu-name {
   display: block;
   font-size: 30px;
   font-weight: 600;
-  color: #333;
+  color: #1A1A2E;
 }
 
 .menu-desc {
   display: block;
   font-size: 24px;
-  color: #999;
-  margin-top: 6px;
+  color: #94A3B8;
+  margin-top: 4px;
 }
 
-.menu-arrow {
-  font-size: 40px;
-  color: #ccc;
-  font-weight: 300;
-}
-
-.menu-badge {
-  font-size: 22px;
-  color: #999;
-  background: #f0f0f0;
-  padding: 4px 12px;
-  border-radius: 8px;
+.menu-arr {
+  font-size: 36px;
+  color: #CBD5E1;
+  flex-shrink: 0;
 }

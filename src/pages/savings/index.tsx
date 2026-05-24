@@ -18,10 +18,9 @@ export default function Savings() {
   const [result, setResult] = useState<SavingsResult | null>(null)
 
   const shareRows = result ? [
-    { label: '距离退休', value: `${result.workingYears}年` },
-    { label: '退休生活时长', value: `${result.retirementYears}年` },
     { label: '退休时总资产', value: `¥${result.totalAtRetirement.toLocaleString()}`, highlight: true },
     { label: '退休后每月可支配', value: `¥${result.monthlyWithdrawal.toLocaleString()}`, highlight: true },
+    { label: '距离退休', value: `${result.workingYears}年` },
   ] : []
 
   const handleCalc = () => {
@@ -49,113 +48,80 @@ export default function Savings() {
 
   return (
     <View className='page'>
-      <View className='card'>
-        <View className='card-title'>退休储蓄规划</View>
+      <View className='page-title'>退休储蓄规划</View>
+      <Text className='page-desc'>评估现有储蓄+持续定投，规划退休后的每月可支配金额</Text>
 
+      <View className='form-card'>
         <View className='form-item'>
-          <Text className='label'>当前年龄</Text>
-          <Input
-            className='input'
-            type='digit'
-            placeholder='请输入当前年龄'
-            value={currentAge}
-            onInput={(e) => setCurrentAge(e.detail.value)}
-          />
+          <Text className='form-label'>当前年龄</Text>
+          <Input className='form-input' type='digit' placeholder='请输入当前年龄'
+            value={currentAge} onInput={(e) => setCurrentAge(e.detail.value)} />
         </View>
-
         <View className='form-item'>
-          <Text className='label'>退休年龄</Text>
-          <Input
-            className='input'
-            type='digit'
-            placeholder='可先用"延迟退休查询"确认'
-            value={retireAge}
-            onInput={(e) => setRetireAge(e.detail.value)}
-          />
+          <Text className='form-label'>退休年龄</Text>
+          <Input className='form-input' type='digit' placeholder='可先用"延迟退休查询"确认'
+            value={retireAge} onInput={(e) => setRetireAge(e.detail.value)} />
         </View>
-
         <View className='form-item'>
-          <Text className='label'>当前储蓄（元）</Text>
-          <Input
-            className='input'
-            type='digit'
-            placeholder='现金、理财、存款等可投资资产'
-            value={currentSavings}
-            onInput={(e) => setCurrentSavings(e.detail.value)}
-          />
+          <Text className='form-label'>当前储蓄（元）</Text>
+          <Input className='form-input' type='digit' placeholder='现金、理财、存款等可投资资产'
+            value={currentSavings} onInput={(e) => setCurrentSavings(e.detail.value)} />
         </View>
-
         <View className='form-item'>
-          <Text className='label'>每月存入（元）</Text>
-          <Input
-            className='input'
-            type='digit'
-            placeholder='每月固定存储或定投金额'
-            value={monthlyDeposit}
-            onInput={(e) => setMonthlyDeposit(e.detail.value)}
-          />
+          <Text className='form-label'>每月存入（元）</Text>
+          <Input className='form-input' type='digit' placeholder='每月固定存储或定投金额'
+            value={monthlyDeposit} onInput={(e) => setMonthlyDeposit(e.detail.value)} />
         </View>
-
         <View className='form-item'>
-          <Text className='label'>预期年化收益率</Text>
-          <Picker
-            mode='selector'
-            range={returnOptions}
-            value={returnIdx}
-            onChange={(e) => setReturnIdx(Number(e.detail.value))}
-          >
-            <View className='picker'>{returnOptions[returnIdx]}</View>
+          <Text className='form-label'>预期年化收益率</Text>
+          <Picker mode='selector' range={returnOptions}
+            value={returnIdx} onChange={(e) => setReturnIdx(Number(e.detail.value))}>
+            <View className='form-picker'>
+              <Text>{returnOptions[returnIdx]}</Text>
+              <Text className='picker-arr'>›</Text>
+            </View>
           </Picker>
         </View>
-
         <View className='form-item'>
-          <Text className='label'>预期寿命（岁）</Text>
-          <Input
-            className='input'
-            type='digit'
-            placeholder='参考值：中国目前人均寿命约78岁'
-            value={lifeExpectancy}
-            onInput={(e) => setLifeExpectancy(e.detail.value)}
-          />
+          <Text className='form-label'>预期寿命（岁）</Text>
+          <Input className='form-input' type='digit' placeholder='参考值：中国目前人均寿命约78岁'
+            value={lifeExpectancy} onInput={(e) => setLifeExpectancy(e.detail.value)} />
         </View>
-
-        <Button className='btn-calc' onClick={handleCalc}>
-          开始规划
-        </Button>
       </View>
 
+      <Button className='btn-primary' onClick={handleCalc}>开始规划</Button>
+
       {result && (
-        <View className='card result-card'>
-          <View className='card-title'>规划结果</View>
-
-          <View className='result-row'>
-            <Text className='result-label'>距离退休</Text>
-            <Text className='result-value'>{result.workingYears}年</Text>
-          </View>
-          <View className='result-row'>
-            <Text className='result-label'>退休生活时长</Text>
-            <Text className='result-value'>{result.retirementYears}年</Text>
-          </View>
-          <View className='result-row highlight'>
+        <>
+          <View className='result-card'>
             <Text className='result-label'>退休时总资产</Text>
-            <Text className='result-value accent'>¥{result.totalAtRetirement.toLocaleString()}</Text>
-          </View>
-          <View className='result-row highlight'>
-            <Text className='result-label'>退休后每月可支配</Text>
-            <Text className='result-value accent'>¥{result.monthlyWithdrawal.toLocaleString()}</Text>
+            <Text className='result-amount'>¥{result.totalAtRetirement.toLocaleString()}</Text>
+            <View className='result-breakdown'>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>¥{result.monthlyWithdrawal.toLocaleString()}</Text>
+                <Text className='breakdown-lbl'>退休后每月可支配</Text>
+              </View>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>{result.workingYears}年</Text>
+                <Text className='breakdown-lbl'>距离退休</Text>
+              </View>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>{result.retirementYears}年</Text>
+                <Text className='breakdown-lbl'>退休生活时长</Text>
+              </View>
+            </View>
           </View>
 
-          <View className='result-tip'>
-            以上为简化估算，未扣除通货膨胀影响。
-            建议退休后每月支出不超过退休前收入的70%-80%。
+          <View className='tip-card'>
+            以上为简化估算，未扣除通货膨胀影响。建议退休后每月支出不超过退休前收入的70%-80%。
           </View>
 
           <ShareCard
             title='退休储蓄规划结果'
             rows={shareRows}
-            tip='简化估算，未扣除通货膨胀影响。建议退休后每月支出不超过退休前收入的70%-80%'
+            tip='简化估算，未扣除通货膨胀影响'
           />
-        </View>
+        </>
       )}
     </View>
   )

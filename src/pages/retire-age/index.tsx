@@ -17,104 +17,90 @@ export default function RetireAge() {
   const [jobIndex, setJobIndex] = useState(0)
   const [result, setResult] = useState<RetireAgeResult | null>(null)
 
+  const shareRows = result ? [
+    { label: '原法定退休年龄', value: `${result.originalAge}周岁` },
+    { label: '延迟月数', value: `${result.delayMonths}个月`, highlight: true },
+    { label: '实际退休年龄', value: result.actualAge, highlight: true },
+    { label: '实际退休时间', value: result.actualDate, highlight: true },
+    { label: '最低缴费年限', value: `${result.minContributionYears}年` },
+  ] : []
+
   const handleCalc = () => {
     if (!birthDate) {
       Taro.showToast({ title: '请选择出生日期', icon: 'none' })
       return
     }
-    const d = new Date(birthDate)
-    if (isNaN(d.getTime())) {
-      Taro.showToast({ title: '日期格式不正确', icon: 'none' })
-      return
-    }
-    setResult(calcRetireAge(d, jobType))
+    setResult(calcRetireAge(new Date(birthDate), jobType))
   }
 
   return (
     <View className='page'>
-      <View className='card'>
-        <View className='card-title'>延迟退休年龄查询</View>
+      <View className='page-title'>延迟退休年龄查询</View>
+      <Text className='page-desc'>根据渐进式延迟退休政策，查看你的实际退休时间</Text>
 
+      <View className='form-card'>
         <View className='form-item'>
-          <Text className='label'>出生日期</Text>
-          <Picker
-            mode='date'
-            value={birthDate}
-            start='1960-01-01'
-            end='2010-12-31'
-            onChange={(e) => setBirthDate(e.detail.value)}
-          >
-            <View className={`picker ${birthDate ? '' : 'placeholder'}`}>
-              {birthDate || '请选择出生日期'}
+          <Text className='form-label'>出生日期</Text>
+          <Picker mode='date' value={birthDate} start='1960-01-01' end='2010-12-31'
+            onChange={(e) => setBirthDate(e.detail.value)}>
+            <View className='form-picker'>
+              <Text style={birthDate ? '' : 'color: #CBD5E1'}>
+                {birthDate || '请选择出生日期'}
+              </Text>
+              <Text className='picker-arr'>›</Text>
             </View>
           </Picker>
         </View>
-
         <View className='form-item'>
-          <Text className='label'>岗位类型</Text>
-          <Picker
-            mode='selector'
-            range={jobOptions}
-            rangeKey='label'
-            value={jobIndex}
-            onChange={(e) => {
+          <Text className='form-label'>岗位类型</Text>
+          <Picker mode='selector' range={jobOptions} rangeKey='label'
+            value={jobIndex} onChange={(e) => {
               const idx = Number(e.detail.value)
               setJobIndex(idx)
               setJobType(jobOptions[idx].value)
-            }}
-          >
-            <View className='picker'>{jobOptions[jobIndex].label}</View>
+            }}>
+            <View className='form-picker'>
+              <Text>{jobOptions[jobIndex].label}</Text>
+              <Text className='picker-arr'>›</Text>
+            </View>
           </Picker>
         </View>
-
-        <Button className='btn-calc' onClick={handleCalc}>
-          计算退休年龄
-        </Button>
       </View>
 
+      <Button className='btn-primary' onClick={handleCalc}>计算退休年龄</Button>
+
       {result && (
-        <View className='card result-card'>
-          <View className='card-title'>计算结果</View>
-          <View className='result-row'>
-            <Text className='result-label'>原法定退休年龄</Text>
-            <Text className='result-value'>{result.originalAge}周岁</Text>
-          </View>
-          <View className='result-row'>
-            <Text className='result-label'>原退休时间</Text>
-            <Text className='result-value'>{result.originalDate}</Text>
-          </View>
-          <View className='result-row highlight'>
-            <Text className='result-label'>延迟月数</Text>
-            <Text className='result-value accent'>{result.delayMonths}个月</Text>
-          </View>
-          <View className='result-row highlight'>
+        <>
+          <View className='result-card'>
             <Text className='result-label'>实际退休年龄</Text>
-            <Text className='result-value accent'>{result.actualAge}</Text>
+            <Text className='result-main'>{result.actualAge}</Text>
+            <Text className='result-sub'>{result.actualDate} 退休</Text>
+            <View className='result-breakdown'>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>{result.originalAge}岁</Text>
+                <Text className='breakdown-lbl'>原法定年龄</Text>
+              </View>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>+{result.delayMonths}月</Text>
+                <Text className='breakdown-lbl'>延迟</Text>
+              </View>
+              <View className='breakdown-item'>
+                <Text className='breakdown-val'>{result.minContributionYears}年</Text>
+                <Text className='breakdown-lbl'>最低缴费年限</Text>
+              </View>
+            </View>
           </View>
-          <View className='result-row highlight'>
-            <Text className='result-label'>实际退休时间</Text>
-            <Text className='result-value accent'>{result.actualDate}</Text>
-          </View>
-          <View className='result-row'>
-            <Text className='result-label'>最低缴费年限</Text>
-            <Text className='result-value'>{result.minContributionYears}年</Text>
-          </View>
-          <View className='result-tip'>
+
+          <View className='tip-card'>
             符合条件可选择弹性提前退休（最多提前3年）或弹性延迟退休（最多延迟3年）
           </View>
+
           <ShareCard
             title='延迟退休年龄查询结果'
-            rows={[
-              { label: '原法定退休年龄', value: `${result.originalAge}周岁` },
-              { label: '原退休时间', value: result.originalDate },
-              { label: '延迟月数', value: `${result.delayMonths}个月`, highlight: true },
-              { label: '实际退休年龄', value: result.actualAge, highlight: true },
-              { label: '实际退休时间', value: result.actualDate, highlight: true },
-              { label: '最低缴费年限', value: `${result.minContributionYears}年` },
-            ]}
+            rows={shareRows}
             tip='符合条件可选择弹性提前退休或延迟退休'
           />
-        </View>
+        </>
       )}
     </View>
   )
