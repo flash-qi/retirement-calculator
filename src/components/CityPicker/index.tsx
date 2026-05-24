@@ -8,6 +8,7 @@ export interface SelectedCity {
   cityName: string
   base: number
   transitionRatio: number
+  note?: string
 }
 
 interface Props {
@@ -18,7 +19,6 @@ interface Props {
 export default function CityPicker({ value, onChange }: Props) {
   const [show, setShow] = useState(false)
   const [search, setSearch] = useState('')
-  // null = show province list, ProvinceData = show cities of this province
   const [selectedProvince, setSelectedProvince] = useState<ProvinceData | null>(null)
 
   const filteredProvinces = search
@@ -33,7 +33,8 @@ export default function CityPicker({ value, onChange }: Props) {
       provinceName: province.name,
       cityName: city.name,
       base: city.base,
-      transitionRatio: province.transitionRatio
+      transitionRatio: province.transitionRatio,
+      note: city.note
     })
     setShow(false)
     setSelectedProvince(null)
@@ -53,18 +54,22 @@ export default function CityPicker({ value, onChange }: Props) {
   return (
     <View className='city-picker'>
       <View className='picker-display' onClick={handleOpen}>
-        <Text className={value ? '' : 'placeholder'}>
-          {value
-            ? `${value.provinceName} ${value.cityName}（${value.base}元/月）`
-            : '请选择省/市'}
-        </Text>
+        <View>
+          <Text className={value ? '' : 'placeholder'}>
+            {value
+              ? `${value.provinceName} ${value.cityName}（${value.base.toLocaleString()}元/月）`
+              : '请选择省/市'}
+          </Text>
+          {value?.note && (
+            <Text className='city-note'>{value.note}</Text>
+          )}
+        </View>
         <Text className='arrow'>{show ? '▲' : '▼'}</Text>
       </View>
 
       {show && (
         <View className='picker-dropdown'>
           {selectedProvince ? (
-            // 城市列表
             <View>
               <View className='dropdown-header' onClick={handleBack}>
                 <Text className='back-arrow'>‹</Text>
@@ -79,13 +84,15 @@ export default function CityPicker({ value, onChange }: Props) {
                   }`}
                   onClick={() => handleSelectCity(selectedProvince, city)}
                 >
-                  <Text className='city-name'>{city.name}</Text>
+                  <View>
+                    <Text className='city-name'>{city.name}</Text>
+                    {city.note && <Text className='city-note'>{city.note}</Text>}
+                  </View>
                   <Text className='city-base'>{city.base.toLocaleString()}元/月</Text>
                 </View>
               ))}
             </View>
           ) : (
-            // 省份列表
             <View>
               <Input
                 className='search-input'

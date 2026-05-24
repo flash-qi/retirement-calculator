@@ -49,6 +49,9 @@ export default function Pension() {
         <View className='form-item'>
           <Text className='label'>城市</Text>
           <CityPicker value={city} onChange={setCity} />
+          <Text className='data-source-note'>
+            当前数据为2025年各省人社厅公布数据，2026年计发基数将在下半年陆续更新
+          </Text>
         </View>
 
         <View className='form-item'>

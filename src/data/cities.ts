@@ -1,6 +1,7 @@
 export interface CityData {
   name: string
   base: number
+  note?: string    // 数据备注，如"2026年数据"等
 }
 
 export interface ProvinceData {
@@ -10,9 +11,12 @@ export interface ProvinceData {
 }
 
 /**
- * 2025年各省/市养老金计发基数
- * 数据来源：各省人社厅官方公布数据，截至2025年底
- * 注：2026年计发基数一般在2026年下半年陆续公布，当前可暂用2025年数据
+ * 各省/市养老金计发基数
+ *
+ * 数据说明：
+ * - 若无特殊标注，数据截至2025年底，来源为各省人社厅官方公布
+ * - 2026年计发基数一般在2026年下半年由各省人社厅陆续公布
+ * - 黑龙江已公布2026年数据，单独标注
  */
 export const provinces: ProvinceData[] = [
   // === 直辖市 ===
@@ -71,7 +75,7 @@ export const provinces: ProvinceData[] = [
       { name: '长春', base: 7978 }
     ]
   },
-  { name: '黑龙江', transitionRatio: 0.012, cities: [{ name: '全省', base: 7570 }] },
+  { name: '黑龙江', transitionRatio: 0.012, cities: [{ name: '全省', base: 7705, note: '2026年数据，全国首个公布' }] },
 
   // === 西南 ===
   { name: '四川', transitionRatio: 0.012, cities: [{ name: '全省', base: 8321 }] },
