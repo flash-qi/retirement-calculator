@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { View, Text, Canvas, Image, Button } from '@tarojs/components'
+import { View, Canvas, Image, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import './index.scss'
 
@@ -9,64 +9,38 @@ interface Props {
   tip?: string
 }
 
+function drawRoundRect(ctx: any, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.arcTo(x + w, y, x + w, y + r, r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r)
+  ctx.lineTo(x + r, y + h)
+  ctx.arcTo(x, y + h, x, y + h - r, r)
+  ctx.lineTo(x, y + r)
+  ctx.arcTo(x, y + r, x + r, y, r)
+  ctx.closePath()
+}
+
 export default function ShareCard({ title, rows, tip }: Props) {
   const [imagePath, setImagePath] = useState('')
   const canvasId = 'shareCanvas'
 
-  const generateImage = useCallback(() => {
-    const query = Taro.createSelectorQuery()
-    query.select(`#${canvasId}`)
-      .fields({ node: true, size: true })
-      .exec((res) => {
-        if (!res[0]?.node) {
-          // fallback: try older API
-          drawWithOldApi()
-          return
-        }
-        const canvas = res[0].node
-        const ctx = canvas.getContext('2d')
-        const width = 375 * 2
-        const height = 500 * 2
-        const dpr = Taro.getSystemInfoSync().pixelRatio
-
-        canvas.width = width
-        canvas.height = height
-        ctx.scale(dpr, dpr)
-
-        drawCard(ctx, 375, 500)
-
-        Taro.canvasToTempFilePath({
-          canvas,
-          success: (result) => {
-            setImagePath(result.tempFilePath)
-          },
-          fail: () => {
-            Taro.showToast({ title: '生成失败，请重试', icon: 'none' })
-          }
-        })
-      })
-  }, [title, rows, tip])
-
   const drawCard = (ctx: any, w: number, h: number) => {
     const padding = 24
-    const cardW = w - padding * 2
 
-    // Background
     ctx.fillStyle = '#f5f5f5'
     ctx.fillRect(0, 0, w, h)
 
-    // Card
     ctx.fillStyle = '#ffffff'
-    ctx.beginPath()
-    ctx.roundRect(padding, 20, cardW, h - 40, 16)
+    drawRoundRect(ctx, padding, 20, w - padding * 2, h - 40, 16)
     ctx.fill()
 
-    // Title
     ctx.fillStyle = '#1a1a1a'
     ctx.font = 'bold 20px sans-serif'
     ctx.fillText('退休计算器', padding + 20, 60)
 
-    // Divider
     ctx.strokeStyle = '#f0f0f0'
     ctx.lineWidth = 1
     ctx.beginPath()
@@ -74,7 +48,6 @@ export default function ShareCard({ title, rows, tip }: Props) {
     ctx.lineTo(w - padding - 20, 80)
     ctx.stroke()
 
-    // Result title
     ctx.fillStyle = '#666'
     ctx.font = '14px sans-serif'
     ctx.fillText(title, padding + 20, 110)
@@ -90,7 +63,6 @@ export default function ShareCard({ title, rows, tip }: Props) {
       y += 50
     })
 
-    // Tip
     if (tip) {
       ctx.fillStyle = '#cc8800'
       ctx.font = '11px sans-serif'
@@ -98,11 +70,43 @@ export default function ShareCard({ title, rows, tip }: Props) {
       y += 30
     }
 
-    // Footer
     ctx.fillStyle = '#ccc'
     ctx.font = '10px sans-serif'
     ctx.fillText('来自"退休计算器"小程序', padding + 20, h - 30)
   }
+
+  const generateImage = useCallback(() => {
+    const query = Taro.createSelectorQuery()
+    query.select(`#${canvasId}`)
+      .fields({ node: true, size: true })
+      .exec((res) => {
+        if (!res[0]?.node) {
+          drawWithOldApi()
+          return
+        }
+        const canvas = res[0].node
+        const ctx = canvas.getContext('2d')
+        const w = 375
+        const h = 500
+        const dpr = Taro.getWindowInfo().pixelRatio
+
+        canvas.width = w * dpr
+        canvas.height = h * dpr
+        ctx.scale(dpr, dpr)
+
+        drawCard(ctx, w, h)
+
+        Taro.canvasToTempFilePath({
+          canvas,
+          success: (result) => {
+            setImagePath(result.tempFilePath)
+          },
+          fail: () => {
+            Taro.showToast({ title: '生成失败，请重试', icon: 'none' })
+          }
+        })
+      })
+  }, [title, rows, tip])
 
   const drawWithOldApi = () => {
     const ctx = Taro.createCanvasContext(canvasId)
