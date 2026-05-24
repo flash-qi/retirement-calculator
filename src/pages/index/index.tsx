@@ -3,9 +3,9 @@ import Taro from '@tarojs/taro'
 import './index.scss'
 
 const menus = [
-  { num: 1, title: '延迟退休年龄查询', desc: '输入出生日期，查看实际退休年龄', url: '/pages/retire-age/index' },
-  { num: 2, title: '社保养老金计算', desc: '估算退休后每月能领多少养老金', url: '/pages/pension/index' },
-  { num: 3, title: '退休储蓄规划', desc: '计算退休后每月可支配金额', url: '/pages/savings/index' }
+  { title: '延迟退休年龄查询', desc: '输入出生日期，查看实际退休年龄', url: '/pages/retire-age/index' },
+  { title: '社保养老金计算', desc: '估算退休后每月能领多少养老金', url: '/pages/pension/index' },
+  { title: '退休储蓄规划', desc: '计算退休后每月可支配金额', url: '/pages/savings/index' }
 ]
 
 const FEEDBACK_LINK = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
@@ -41,11 +41,10 @@ export default function Index() {
       <View className='menu'>
         {menus.map((m) => (
           <View
-            key={m.num}
+            key={m.title}
             className='menu-card'
             onClick={() => Taro.navigateTo({ url: m.url })}
           >
-            <View className={`menu-num n${m.num}`}>{m.num}</View>
             <View className='menu-info'>
               <Text className='menu-name'>{m.title}</Text>
               <Text className='menu-desc'>{m.desc}</Text>
