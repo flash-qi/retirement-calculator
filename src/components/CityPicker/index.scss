@@ -35,6 +35,26 @@
   overflow: hidden;
 }
 
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.back-arrow {
+  font-size: 40px;
+  color: #2979ff;
+  margin-right: 16px;
+  line-height: 1;
+}
+
+.dropdown-title {
+  font-size: 30px;
+  font-weight: 600;
+  color: #333;
+}
+
 .search-input {
   width: 100%;
   padding: 20px 24px;
@@ -44,7 +64,7 @@
 }
 
 .city-list {
-  max-height: 400px;
+  max-height: 480px;
 }
 
 .city-item {

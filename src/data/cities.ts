@@ -1,40 +1,92 @@
 export interface CityData {
   name: string
   base: number
-  transitionRatio: number // 过渡系数
 }
 
-/** 2025年各省/市计发基数（元/月）+ 过渡系数 */
-export const cities: CityData[] = [
-  { name: '上海', base: 12434, transitionRatio: 0.013 },
-  { name: '北京', base: 12049, transitionRatio: 0.013 },
-  { name: '西藏', base: 11777, transitionRatio: 0.012 },
-  { name: '深圳', base: 11293, transitionRatio: 0.012 },
-  { name: '广东', base: 9493, transitionRatio: 0.012 },
-  { name: '天津', base: 9417, transitionRatio: 0.013 },
-  { name: '武汉', base: 9112, transitionRatio: 0.012 },
-  { name: '青海', base: 9056, transitionRatio: 0.012 },
-  { name: '江苏', base: 8917, transitionRatio: 0.012 },
-  { name: '四川', base: 8462, transitionRatio: 0.012 },
-  { name: '新疆', base: 8448, transitionRatio: 0.012 },
-  { name: '浙江', base: 8433, transitionRatio: 0.012 },
-  { name: '宁夏', base: 8366, transitionRatio: 0.012 },
-  { name: '云南', base: 8265, transitionRatio: 0.012 },
-  { name: '重庆', base: 8240, transitionRatio: 0.013 },
-  { name: '内蒙古', base: 8197, transitionRatio: 0.012 },
-  { name: '海南', base: 8188, transitionRatio: 0.012 },
-  { name: '安徽', base: 7999, transitionRatio: 0.012 },
-  { name: '长春', base: 7978, transitionRatio: 0.012 },
-  { name: '山东', base: 7831, transitionRatio: 0.013 },
-  { name: '湖南', base: 7694, transitionRatio: 0.012 },
-  { name: '黑龙江', base: 7705, transitionRatio: 0.012 },
-  { name: '甘肃', base: 7446, transitionRatio: 0.012 },
-  { name: '河北', base: 7410, transitionRatio: 0.013 },
-  { name: '贵州', base: 7325, transitionRatio: 0.012 },
-  { name: '吉林', base: 7322, transitionRatio: 0.012 },
-  { name: '广西', base: 7100, transitionRatio: 0.012 },
-  { name: '河南', base: 7000, transitionRatio: 0.012 },
-  { name: '江西', base: 6900, transitionRatio: 0.012 },
-  { name: '山西', base: 7200, transitionRatio: 0.012 },
-  { name: '辽宁', base: 7300, transitionRatio: 0.012 }
+export interface ProvinceData {
+  name: string
+  transitionRatio: number
+  cities: CityData[]
+}
+
+/**
+ * 2025年各省/市养老金计发基数
+ * 数据来源：各省人社厅官方公布数据，截至2025年底
+ * 注：2026年计发基数一般在2026年下半年陆续公布，当前可暂用2025年数据
+ */
+export const provinces: ProvinceData[] = [
+  // === 直辖市 ===
+  { name: '北京', transitionRatio: 0.013, cities: [{ name: '全市', base: 12049 }] },
+  { name: '上海', transitionRatio: 0.013, cities: [{ name: '全市', base: 12434 }] },
+  { name: '天津', transitionRatio: 0.013, cities: [{ name: '全市', base: 9417 }] },
+  { name: '重庆', transitionRatio: 0.013, cities: [{ name: '全市', base: 8240 }] },
+
+  // === 华东 ===
+  {
+    name: '广东', transitionRatio: 0.012, cities: [
+      { name: '全省（不含深圳）', base: 9493 },
+      { name: '深圳', base: 11293 }
+    ]
+  },
+  { name: '江苏', transitionRatio: 0.012, cities: [{ name: '全省', base: 8917 }] },
+  { name: '浙江', transitionRatio: 0.012, cities: [{ name: '全省', base: 8433 }] },
+  { name: '福建', transitionRatio: 0.012, cities: [{ name: '全省', base: 7932 }] },
+  { name: '安徽', transitionRatio: 0.012, cities: [{ name: '全省', base: 7999 }] },
+  { name: '江西', transitionRatio: 0.012, cities: [{ name: '全省', base: 7054 }] },
+  {
+    name: '山东', transitionRatio: 0.013, cities: [
+      { name: '全省（不含菏泽）', base: 7831 },
+      { name: '菏泽（企业）', base: 7506 }
+    ]
+  },
+
+  // === 华中 ===
+  { name: '河南', transitionRatio: 0.012, cities: [{ name: '全省', base: 6738 }] },
+  {
+    name: '湖北', transitionRatio: 0.012, cities: [
+      { name: '武汉', base: 9112 },
+      { name: '襄阳', base: 7325 },
+      { name: '宜昌', base: 7424 },
+      { name: '其他城市（第3档）', base: 7154 }
+    ]
+  },
+  { name: '湖南', transitionRatio: 0.012, cities: [{ name: '全省', base: 7694 }] },
+
+  // === 华北 ===
+  { name: '河北', transitionRatio: 0.013, cities: [{ name: '全省', base: 7410 }] },
+  { name: '山西', transitionRatio: 0.012, cities: [{ name: '全省', base: 7253 }] },
+  { name: '内蒙古', transitionRatio: 0.012, cities: [{ name: '全省', base: 8179 }] },
+
+  // === 东北 ===
+  {
+    name: '辽宁', transitionRatio: 0.012, cities: [
+      { name: '全省（不含沈阳、大连）', base: 7346 },
+      { name: '沈阳（企业）', base: 8390 },
+      { name: '大连（企业）', base: 8956 }
+    ]
+  },
+  {
+    name: '吉林', transitionRatio: 0.012, cities: [
+      { name: '全省（不含长春）', base: 7322 },
+      { name: '长春', base: 7978 }
+    ]
+  },
+  { name: '黑龙江', transitionRatio: 0.012, cities: [{ name: '全省', base: 7570 }] },
+
+  // === 西南 ===
+  { name: '四川', transitionRatio: 0.012, cities: [{ name: '全省', base: 8321 }] },
+  { name: '贵州', transitionRatio: 0.012, cities: [{ name: '全省', base: 7325 }] },
+  { name: '云南', transitionRatio: 0.012, cities: [{ name: '全省', base: 8265 }] },
+  { name: '西藏', transitionRatio: 0.012, cities: [{ name: '全区', base: 11777 }] },
+
+  // === 西北 ===
+  { name: '陕西', transitionRatio: 0.012, cities: [{ name: '全省', base: 7881 }] },
+  { name: '甘肃', transitionRatio: 0.012, cities: [{ name: '全省', base: 7746 }] },
+  { name: '青海', transitionRatio: 0.012, cities: [{ name: '全省', base: 9056 }] },
+  { name: '宁夏', transitionRatio: 0.012, cities: [{ name: '全区', base: 8366 }] },
+  { name: '新疆', transitionRatio: 0.012, cities: [{ name: '全区', base: 8448 }] },
+
+  // === 华南其他 ===
+  { name: '广西', transitionRatio: 0.012, cities: [{ name: '全区', base: 6983 }] },
+  { name: '海南', transitionRatio: 0.012, cities: [{ name: '全省', base: 8188 }] }
 ]

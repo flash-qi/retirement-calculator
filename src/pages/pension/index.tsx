@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { View, Text, Input, Picker, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import CityPicker from '../../components/CityPicker'
+import CityPicker, { type SelectedCity } from '../../components/CityPicker'
 import { calcPension, type PensionResult } from '../../utils/pension'
-import { type CityData } from '../../data/cities'
 import './index.scss'
 
 const indexOptions = ['0.6 (60%)', '0.8 (80%)', '1.0 (100%)', '1.5 (150%)', '2.0 (200%)', '3.0 (300%)']
 const indexValues = [0.6, 0.8, 1.0, 1.5, 2.0, 3.0]
 
 export default function Pension() {
-  const [city, setCity] = useState<CityData | null>(null)
+  const [city, setCity] = useState<SelectedCity | null>(null)
   const [salary, setSalary] = useState('')
   const [conYears, setConYears] = useState('')
   const [deemedYears, setDeemedYears] = useState('0')
