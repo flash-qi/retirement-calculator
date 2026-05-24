@@ -10,5 +10,6 @@ export default {
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: '退休计算器',
     navigationBarTextStyle: 'black'
-  }
+  },
+  lazyCodeLoading: 'requiredComponents'
 }
