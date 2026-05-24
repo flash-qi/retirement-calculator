@@ -10,10 +10,22 @@ const menus = [
 
 export default function Index() {
   const handleFeedback = () => {
+    const link = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
     Taro.setClipboardData({
-      data: 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ',
+      data: link,
       success: () => {
-        Taro.showToast({ title: '反馈链接已复制，请在浏览器中打开', icon: 'none', duration: 2500 })
+        Taro.showModal({
+          title: '意见反馈',
+          content: '反馈链接已复制，请在浏览器中粘贴打开',
+          showCancel: false
+        })
+      },
+      fail: () => {
+        Taro.showModal({
+          title: '意见反馈',
+          content: `请复制以下链接在浏览器中打开：\n\n${link}`,
+          showCancel: false
+        })
       }
     })
   }
