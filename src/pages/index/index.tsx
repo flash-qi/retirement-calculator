@@ -9,6 +9,15 @@ const menus = [
 ]
 
 export default function Index() {
+  const handleFeedback = () => {
+    Taro.setClipboardData({
+      data: 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ',
+      success: () => {
+        Taro.showToast({ title: '反馈链接已复制，请在浏览器中打开', icon: 'none', duration: 2500 })
+      }
+    })
+  }
+
   return (
     <View className='home'>
       <View className='hero'>
@@ -32,6 +41,10 @@ export default function Index() {
             <Text className='menu-arr'>›</Text>
           </View>
         ))}
+      </View>
+
+      <View className='footer' onClick={handleFeedback}>
+        <Text className='footer-text'>意见反馈</Text>
       </View>
     </View>
   )
