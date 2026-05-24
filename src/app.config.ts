@@ -1,7 +1,8 @@
 export default {
   pages: [
     'pages/index/index',
-    'pages/retire-age/index'
+    'pages/retire-age/index',
+    'pages/pension/index'
   ],
   window: {
     backgroundTextStyle: 'light',

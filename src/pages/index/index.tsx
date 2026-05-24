@@ -24,13 +24,13 @@ export default function Index() {
           <Text className='menu-arrow'>›</Text>
         </View>
 
-        <View className='menu-item disabled'>
+        <View className='menu-item' onClick={() => navTo('/pages/pension/index')}>
           <Text className='menu-icon'>💰</Text>
           <View className='menu-text'>
             <Text className='menu-title'>社保养老金计算</Text>
             <Text className='menu-desc'>估算退休后每月能领多少养老金</Text>
           </View>
-          <Text className='menu-badge'>即将上线</Text>
+          <Text className='menu-arrow'>›</Text>
         </View>
 
         <View className='menu-item disabled'>
