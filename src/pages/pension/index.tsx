@@ -77,11 +77,11 @@ export default function Pension() {
         </View>
 
         <View className='form-item'>
-          <Text className='label'>视同缴费年限（年）</Text>
+          <Text className='label'>视同缴费年限 / 1998年前工龄（年）</Text>
           <Input
             className='input'
             type='digit'
-            placeholder='1998年前参加工作的"中人"填写'
+            placeholder='1998年后参加工作填0即可'
             value={deemedYears}
             onInput={(e) => setDeemedYears(e.detail.value)}
           />
