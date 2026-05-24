@@ -1,0 +1,125 @@
+.page {
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.card-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.form-item {
+  margin-bottom: 28px;
+}
+
+.label {
+  display: block;
+  font-size: 28px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.input {
+  background: #f7f8fa;
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 30px;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.picker {
+  background: #f7f8fa;
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 30px;
+  color: #333;
+}
+
+.btn-calc {
+  width: 100%;
+  background: #2979ff;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 24px 0;
+  margin-top: 16px;
+  border: none;
+
+  &::after {
+    border: none;
+  }
+}
+
+.result-card {
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    &.highlight {
+      background: #f0f5ff;
+      margin: 0 -32px;
+      padding: 20px 32px;
+      border-radius: 8px;
+      border-bottom: none;
+      margin-bottom: 4px;
+    }
+  }
+
+  .result-label {
+    font-size: 28px;
+    color: #666;
+  }
+
+  .result-value {
+    font-size: 30px;
+    color: #333;
+    font-weight: 600;
+
+    &.accent {
+      color: #2979ff;
+      font-size: 34px;
+    }
+  }
+
+  .result-tip {
+    margin-top: 24px;
+    padding: 16px;
+    background: #fff7e6;
+    border-radius: 8px;
+    font-size: 24px;
+    color: #cc8800;
+    line-height: 1.6;
+  }
+
+  .btn-share {
+    width: 100%;
+    background: #07c160;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 20px 0;
+    margin-top: 24px;
+    border: none;
+
+    &::after {
+      border: none;
+    }
+  }
+}

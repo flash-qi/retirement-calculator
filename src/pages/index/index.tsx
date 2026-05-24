@@ -33,13 +33,13 @@ export default function Index() {
           <Text className='menu-arrow'>›</Text>
         </View>
 
-        <View className='menu-item disabled'>
+        <View className='menu-item' onClick={() => navTo('/pages/savings/index')}>
           <Text className='menu-icon'>📊</Text>
           <View className='menu-text'>
             <Text className='menu-title'>退休储蓄规划</Text>
             <Text className='menu-desc'>计算退休后每月可支配金额</Text>
           </View>
-          <Text className='menu-badge'>即将上线</Text>
+          <Text className='menu-arrow'>›</Text>
         </View>
       </View>
     </View>
