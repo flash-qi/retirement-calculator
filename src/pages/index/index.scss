@@ -1,1 +1,78 @@
-// 页面样式占位
+.home {
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 0 40px;
+}
+
+.hero-title {
+  display: block;
+  font-size: 44px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.hero-sub {
+  display: block;
+  font-size: 28px;
+  color: #999;
+  margin-top: 12px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+
+  &.disabled {
+    opacity: 0.5;
+  }
+}
+
+.menu-icon {
+  font-size: 44px;
+  margin-right: 20px;
+}
+
+.menu-text {
+  flex: 1;
+}
+
+.menu-title {
+  display: block;
+  font-size: 30px;
+  font-weight: 600;
+  color: #333;
+}
+
+.menu-desc {
+  display: block;
+  font-size: 24px;
+  color: #999;
+  margin-top: 6px;
+}
+
+.menu-arrow {
+  font-size: 36px;
+  color: #ccc;
+  font-weight: 300;
+}
+
+.menu-badge {
+  font-size: 22px;
+  color: #999;
+  background: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
