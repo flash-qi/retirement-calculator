@@ -8,11 +8,12 @@ const menus = [
   { num: 3, title: '退休储蓄规划', desc: '计算退休后每月可支配金额', url: '/pages/savings/index' }
 ]
 
+const FEEDBACK_LINK = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
+
 export default function Index() {
   const handleFeedback = () => {
-    const link = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
     Taro.setClipboardData({
-      data: link,
+      data: FEEDBACK_LINK,
       success: () => {
         Taro.showModal({
           title: '意见反馈',
@@ -23,7 +24,7 @@ export default function Index() {
       fail: () => {
         Taro.showModal({
           title: '意见反馈',
-          content: `请复制以下链接在浏览器中打开：\n\n${link}`,
+          content: `请复制以下链接在浏览器中打开：\n\n${FEEDBACK_LINK}`,
           showCancel: false
         })
       }
@@ -33,7 +34,6 @@ export default function Index() {
   return (
     <View className='home'>
       <View className='hero'>
-        <View className='hero-icon'>🧮</View>
         <Text className='hero-title'>退休计算器</Text>
         <Text className='hero-sub'>算算你退休后能领多少钱</Text>
       </View>
