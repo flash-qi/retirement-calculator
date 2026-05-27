@@ -56,22 +56,22 @@ export default function Savings() {
       <View className='form-card'>
         <View className='form-item'>
           <Text className='form-label'>当前年龄</Text>
-          <Input className='form-input' type='digit' placeholder='请输入当前年龄'
+          <Input className='form-input' type='digit'
             value={currentAge} onInput={(e) => setCurrentAge(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>退休年龄</Text>
-          <Input className='form-input' type='digit' placeholder='可先用"延迟退休查询"确认'
+          <Input className='form-input' type='digit'
             value={retireAge} onInput={(e) => setRetireAge(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>当前储蓄（元）</Text>
-          <Input className='form-input' type='digit' placeholder='现金、理财、存款等可投资资产'
+          <Input className='form-input' type='digit'
             value={currentSavings} onInput={(e) => setCurrentSavings(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>每月存入（元）</Text>
-          <Input className='form-input' type='digit' placeholder='每月固定存储或定投金额'
+          <Input className='form-input' type='digit'
             value={monthlyDeposit} onInput={(e) => setMonthlyDeposit(e.detail.value)} />
         </View>
         <View className='form-item'>
@@ -86,7 +86,7 @@ export default function Savings() {
         </View>
         <View className='form-item'>
           <Text className='form-label'>预期寿命（岁）</Text>
-          <Input className='form-input' type='digit' placeholder='参考值：中国目前人均寿命约78岁'
+          <Input className='form-input' type='digit'
             value={lifeExpectancy} onInput={(e) => setLifeExpectancy(e.detail.value)} />
         </View>
       </View>

@@ -60,17 +60,17 @@ export default function Pension() {
         </View>
         <View className='form-item'>
           <Text className='form-label'>月工资（元）</Text>
-          <Input className='form-input' type='digit' placeholder='请输入税前月工资'
+          <Input className='form-input' type='digit'
             value={salary} onInput={(e) => setSalary(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>缴费年限（年）</Text>
-          <Input className='form-input' type='digit' placeholder='累计缴费年限，含视同缴费'
+          <Input className='form-input' type='digit'
             value={conYears} onInput={(e) => setConYears(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>视同缴费年限 / 1998年前工龄（年）</Text>
-          <Input className='form-input' type='digit' placeholder='1998年后参加工作填0即可'
+          <Input className='form-input' type='digit'
             value={deemedYears} onInput={(e) => setDeemedYears(e.detail.value)} />
         </View>
         <View className='form-item'>
@@ -85,12 +85,12 @@ export default function Pension() {
         </View>
         <View className='form-item'>
           <Text className='form-label'>个人账户余额（元）</Text>
-          <Input className='form-input' type='digit' placeholder='社保个人账户累计储存额'
+          <Input className='form-input' type='digit'
             value={accountBal} onInput={(e) => setAccountBal(e.detail.value)} />
         </View>
         <View className='form-item'>
           <Text className='form-label'>退休年龄</Text>
-          <Input className='form-input' type='number' placeholder='如不确定可先用延迟退休查询'
+          <Input className='form-input' type='number'
             value={retireAge} onInput={(e) => setRetireAge(e.detail.value)} />
         </View>
       </View>
