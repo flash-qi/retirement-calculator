@@ -47,12 +47,12 @@
 }
 
 .form-input {
-  font-size: 28px;
+  font-size: 26px;
   color: #1E293B;
   padding: 0;
   width: 100%;
   background: transparent;
-  font-weight: 500;
+  font-weight: 400;
 
   &::placeholder {
     color: #CBD5E1;
@@ -60,12 +60,12 @@
 }
 
 .form-picker {
-  font-size: 28px;
+  font-size: 26px;
   color: #1E293B;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 500;
+  font-weight: 400;
 
   .picker-arr {
     color: #CBD5E1;
