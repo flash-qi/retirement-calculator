@@ -48,8 +48,10 @@ export default function Savings() {
 
   return (
     <View className='page'>
-      <View className='page-title'>退休储蓄规划</View>
-      <Text className='page-desc'>评估现有储蓄+持续定投，规划退休后的每月可支配金额</Text>
+      <View className='page-header'>
+        <Text className='page-title'>退休储蓄规划</Text>
+        <Text className='page-desc'>评估现有储蓄+持续定投，规划退休后的每月可支配金额</Text>
+      </View>
 
       <View className='form-card'>
         <View className='form-item'>
@@ -111,16 +113,10 @@ export default function Savings() {
               </View>
             </View>
           </View>
-
           <View className='tip-card'>
             以上为简化估算，未扣除通货膨胀影响。建议退休后每月支出不超过退休前收入的70%-80%。
           </View>
-
-          <ShareCard
-            title='退休储蓄规划结果'
-            rows={shareRows}
-            tip='简化估算，未扣除通货膨胀影响'
-          />
+          <ShareCard title='退休储蓄规划结果' rows={shareRows} tip='简化估算供参考' />
         </>
       )}
     </View>

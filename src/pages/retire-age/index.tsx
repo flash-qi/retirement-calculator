@@ -35,8 +35,10 @@ export default function RetireAge() {
 
   return (
     <View className='page'>
-      <View className='page-title'>延迟退休年龄查询</View>
-      <Text className='page-desc'>根据渐进式延迟退休政策，查看你的实际退休时间</Text>
+      <View className='page-header'>
+        <Text className='page-title'>延迟退休年龄查询</Text>
+        <Text className='page-desc'>根据渐进式延迟退休政策，查看你的实际退休时间</Text>
+      </View>
 
       <View className='form-card'>
         <View className='form-item'>
@@ -90,16 +92,10 @@ export default function RetireAge() {
               </View>
             </View>
           </View>
-
           <View className='tip-card'>
             符合条件可选择弹性提前退休（最多提前3年）或弹性延迟退休（最多延迟3年）
           </View>
-
-          <ShareCard
-            title='延迟退休年龄查询结果'
-            rows={shareRows}
-            tip='符合条件可选择弹性提前退休或延迟退休'
-          />
+          <ShareCard title='延迟退休年龄查询结果' rows={shareRows} tip='弹性退休政策请参考当地人社部门' />
         </>
       )}
     </View>

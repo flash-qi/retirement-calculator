@@ -1,5 +1,5 @@
 .home {
-  padding: 0 16px 20px;
+  padding: 0 20px 24px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -7,27 +7,45 @@
 
 .hero {
   text-align: center;
-  padding: 28px 0 20px;
+  padding: 40px 0 32px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
 
 .hero-title {
   display: block;
-  font-size: 44px;
-  font-weight: 700;
-  color: #1A1A2E;
+  font-size: 48px;
+  font-weight: 800;
+  color: #1E293B;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #6366F1, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-sub {
   display: block;
   font-size: 26px;
   color: #94A3B8;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   flex: 1;
 }
 
@@ -35,21 +53,42 @@
   display: flex;
   align-items: center;
   background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid rgba(99,102,241,0.06);
+  transition: transform 0.15s ease;
+
+  &:active {
+    transform: scale(0.985);
+  }
+}
+
+.menu-icon-wrap {
+  width: 64px;
+  height: 64px;
   border-radius: 20px;
-  padding: 28px 24px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  margin-right: 20px;
+
+  &.c1 { background: linear-gradient(135deg, #EEF2FF, #E0E7FF); }
+  &.c2 { background: linear-gradient(135deg, #F0FDF4, #DCFCE7); }
+  &.c3 { background: linear-gradient(135deg, #FFFBEB, #FEF3C7); }
 }
 
 .menu-info {
   flex: 1;
-  min-width: 0;
 }
 
 .menu-name {
   display: block;
   font-size: 30px;
-  font-weight: 600;
-  color: #1A1A2E;
+  font-weight: 700;
+  color: #1E293B;
 }
 
 .menu-desc {
@@ -60,14 +99,14 @@
 }
 
 .menu-arr {
-  font-size: 36px;
+  font-size: 32px;
   color: #CBD5E1;
   flex-shrink: 0;
 }
 
 .footer {
   text-align: center;
-  padding: 24px 0 0;
+  padding: 28px 0 0;
 }
 
 .footer-text {

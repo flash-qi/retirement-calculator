@@ -48,8 +48,10 @@ export default function Pension() {
 
   return (
     <View className='page'>
-      <View className='page-title'>社保养老金计算</View>
-      <Text className='page-desc'>选择城市、填写信息，估算退休后每月养老金</Text>
+      <View className='page-header'>
+        <Text className='page-title'>社保养老金计算</Text>
+        <Text className='page-desc'>选择城市、填写信息，估算退休后每月养老金</Text>
+      </View>
 
       <View className='form-card'>
         <View className='form-item'>
@@ -119,16 +121,10 @@ export default function Pension() {
               )}
             </View>
           </View>
-
           <View className='tip-card'>
             以上为估算结果，实际金额以当地社保机构核定为准。养老金遵循"多缴多得、长缴多得"原则。
           </View>
-
-          <ShareCard
-            title='社保养老金计算结果'
-            rows={shareRows}
-            tip='以上为估算结果，实际金额以当地社保机构核定为准'
-          />
+          <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' />
         </>
       )}
     </View>

@@ -1,35 +1,26 @@
-.city-picker {
-  position: relative;
-}
+.city-picker { position: relative; }
 
 .picker-display {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 30px;
-  color: #1A1A2E;
-  padding: 4px 0;
+  color: #1E293B;
+  font-weight: 500;
 
-  .placeholder {
-    color: #CBD5E1;
-  }
-
-  .arrow {
-    font-size: 24px;
-    color: #CBD5E1;
-  }
+  .placeholder { color: #CBD5E1; }
+  .arrow { font-size: 24px; color: #CBD5E1; }
 }
 
 .picker-dropdown {
   position: absolute;
-  top: 100%;
-  left: -20px;
-  right: -20px;
+  top: calc(100% + 8px);
+  left: -24px;
+  right: -24px;
   z-index: 100;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  margin-top: 8px;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
   overflow: hidden;
 }
 
@@ -42,15 +33,15 @@
 
 .back-arrow {
   font-size: 44px;
-  color: #3B82F6;
+  color: #6366F1;
   margin-right: 16px;
   line-height: 1;
 }
 
 .dropdown-title {
   font-size: 32px;
-  font-weight: 600;
-  color: #1A1A2E;
+  font-weight: 700;
+  color: #1E293B;
 }
 
 .search-input {
@@ -61,9 +52,7 @@
   box-sizing: border-box;
 }
 
-.city-list {
-  max-height: 480px;
-}
+.city-list { max-height: 480px; }
 
 .city-item {
   display: flex;
@@ -71,26 +60,13 @@
   align-items: center;
   padding: 22px 24px;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid #F1F5F9;
-  }
+  &:not(:last-child) { border-bottom: 1px solid #F1F5F9; }
 
-  &.active .city-name {
-    color: #3B82F6;
-    font-weight: 600;
-  }
+  &.active .city-name { color: #6366F1; font-weight: 600; }
 }
 
-.city-name {
-  font-size: 28px;
-  color: #1A1A2E;
-}
-
-.city-base {
-  font-size: 26px;
-  color: #94A3B8;
-}
-
+.city-name { font-size: 28px; color: #1E293B; }
+.city-base { font-size: 26px; color: #94A3B8; }
 .city-note {
   display: inline-block;
   font-size: 22px;
