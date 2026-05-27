@@ -1,4 +1,3 @@
-export type Gender = 'male' | 'female'
 export type JobType = 'male_worker' | 'female_cadre' | 'female_worker'
 
 interface RetireAgeResult {

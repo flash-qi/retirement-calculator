@@ -3,3 +3,8 @@ dist/
 .swc/
 .DS_Store
 *.log
+*.png
+*.jpg
+project.private.config.json
+design-preview.html
+icon.html

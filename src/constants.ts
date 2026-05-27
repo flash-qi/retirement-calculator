@@ -33,12 +33,3 @@ export const MONTHS_TABLE: Record<number, number> = {
   70: 56
 }
 
-/** 2026年个人账户记账利率（预估） */
-export const ACCOUNT_INTEREST_RATE = 0.0371
-
-/** 延迟退休参考：最低缴费年限变化表 */
-export const MIN_CONTRIBUTION_YEARS: Record<number, number> = {
-  2025: 15, 2026: 15, 2027: 15, 2028: 15, 2029: 15,
-  2030: 15.5, 2031: 16, 2032: 16.5, 2033: 17, 2034: 17.5,
-  2035: 18, 2036: 18.5, 2037: 19, 2038: 19.5, 2039: 20
-}
