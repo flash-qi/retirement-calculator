@@ -41,13 +41,13 @@
 
 .form-label {
   display: block;
-  font-size: 24px;
+  font-size: 22px;
   color: #94A3B8;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .form-input {
-  font-size: 30px;
+  font-size: 28px;
   color: #1E293B;
   padding: 0;
   width: 100%;
@@ -56,11 +56,12 @@
 
   &::placeholder {
     color: #CBD5E1;
+    font-size: 26px;
   }
 }
 
 .form-picker {
-  font-size: 30px;
+  font-size: 28px;
   color: #1E293B;
   display: flex;
   justify-content: space-between;
