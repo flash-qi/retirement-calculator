@@ -10,6 +10,10 @@ const indexOptions = ['0.6 (60%)', '0.8 (80%)', '1.0 (100%)', '1.5 (150%)', '2.0
 const indexValues = [0.6, 0.8, 1.0, 1.5, 2.0, 3.0]
 
 export default function Pension() {
+  Taro.useShareAppMessage(() => ({
+    title: '退休计算器',
+    path: '/pages/index/index'
+  }))
   const [city, setCity] = useState<SelectedCity | null>(null)
   const [salary, setSalary] = useState('')
   const [conYears, setConYears] = useState('')

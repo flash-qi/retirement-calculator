@@ -12,6 +12,10 @@ const jobOptions: { label: string; value: JobType }[] = [
 ]
 
 export default function RetireAge() {
+  Taro.useShareAppMessage(() => ({
+    title: '退休计算器',
+    path: '/pages/index/index'
+  }))
   const [birthDate, setBirthDate] = useState('')
   const [jobType, setJobType] = useState<JobType>('male_worker')
   const [jobIndex, setJobIndex] = useState(0)

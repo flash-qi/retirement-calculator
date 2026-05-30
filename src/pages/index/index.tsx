@@ -11,6 +11,11 @@ const menus = [
 const FEEDBACK_LINK = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
 
 export default function Index() {
+  Taro.useShareAppMessage(() => ({
+    title: '退休计算器 - 算算你退休后能领多少钱',
+    path: '/pages/index/index'
+  }))
+
   const handleFeedback = () => {
     Taro.setClipboardData({
       data: FEEDBACK_LINK,

@@ -9,6 +9,10 @@ const returnOptions = ['保守 2%', '稳健 4%', '平衡 6%', '进取 8%']
 const returnValues = [0.02, 0.04, 0.06, 0.08]
 
 export default function Savings() {
+  Taro.useShareAppMessage(() => ({
+    title: '退休计算器',
+    path: '/pages/index/index'
+  }))
   const [currentAge, setCurrentAge] = useState('')
   const [retireAge, setRetireAge] = useState('')
   const [currentSavings, setCurrentSavings] = useState('')
