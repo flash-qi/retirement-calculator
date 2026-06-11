@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { View, Text, Picker, Button } from '@tarojs/components'
+import { useState, useEffect } from 'react'
+import { View, Text, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { calcRetireAge, type JobType, type RetireAgeResult } from '../../utils/retireAge'
 import ShareCard from '../../components/ShareCard'
@@ -29,13 +29,13 @@ export default function RetireAge() {
     { label: '最低缴费年限', value: `${result.minContributionYears}年` },
   ] : []
 
-  const handleCalc = () => {
+  useEffect(() => {
     if (!birthDate) {
-      Taro.showToast({ title: '请选择出生日期', icon: 'none' })
+      setResult(null)
       return
     }
     setResult(calcRetireAge(new Date(birthDate), jobType))
-  }
+  }, [birthDate, jobType])
 
   return (
     <View className='page'>
@@ -73,7 +73,7 @@ export default function RetireAge() {
         </View>
       </View>
 
-      <Button className='btn-primary' onClick={handleCalc}>计算退休年龄</Button>
+      <Text className='form-note'>选择出生日期和岗位类型后自动计算</Text>
 
       {result && (
         <>

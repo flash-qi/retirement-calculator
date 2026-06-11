@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { View, Text, Input, Picker, Button } from '@tarojs/components'
+import { useState, useEffect } from 'react'
+import { View, Text, Input, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import CityPicker, { type SelectedCity } from '../../components/CityPicker'
 import ShareCard from '../../components/ShareCard'
@@ -23,21 +23,12 @@ export default function Pension() {
   const [retireAge, setRetireAge] = useState('60')
   const [result, setResult] = useState<PensionResult | null>(null)
 
-  const shareRows = result ? [
-    { label: '基础养老金', value: `¥${result.basicPension.toLocaleString()}` },
-    { label: '个人账户养老金', value: `¥${result.accountPension.toLocaleString()}` },
-    ...(result.transitionPension > 0
-      ? [{ label: '过渡性养老金', value: `¥${result.transitionPension.toLocaleString()}` }]
-      : []),
-    { label: '月养老金合计', value: `¥${result.totalPension.toLocaleString()}/月`, highlight: true },
-  ] : []
-
-  const handleCalc = () => {
-    if (!city) { Taro.showToast({ title: '请选择省/市', icon: 'none' }); return }
-    if (!salary) { Taro.showToast({ title: '请输入月工资', icon: 'none' }); return }
-    if (!conYears) { Taro.showToast({ title: '请输入缴费年限', icon: 'none' }); return }
-    if (!accountBal) { Taro.showToast({ title: '请输入个人账户余额', icon: 'none' }); return }
-
+  // Instant calc when all required fields are filled
+  useEffect(() => {
+    if (!city || !salary || !conYears || !accountBal) {
+      setResult(null)
+      return
+    }
     const avgIndex = indexValues[indexIdx]
     setResult(calcPension({
       baseAmount: city.base,
@@ -48,13 +39,28 @@ export default function Pension() {
       retireAge: Number(retireAge),
       transitionRatio: city.transitionRatio
     }))
-  }
+  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge])
+
+  const shareRows = result ? [
+    { label: '基础养老金', value: `¥${result.basicPension.toLocaleString()}` },
+    { label: '个人账户养老金', value: `¥${result.accountPension.toLocaleString()}` },
+    ...(result.transitionPension > 0
+      ? [{ label: '过渡性养老金', value: `¥${result.transitionPension.toLocaleString()}` }]
+      : []),
+    { label: '月养老金合计', value: `¥${result.totalPension.toLocaleString()}/月`, highlight: true },
+  ] : []
+
+  const interpretation = result && salary ? (() => {
+    const replacementRate = Math.round(result.totalPension / Number(salary) * 100)
+    const level = replacementRate >= 70 ? '良好' : replacementRate >= 50 ? '一般' : '偏低'
+    return `养老金替代率约 ${replacementRate}%（${level}）。国际劳工组织建议退休后收入不低于退休前的 70%，你可通过提高缴费基数和延长缴费年限来提升。`
+  })() : ''
 
   return (
     <View className='page'>
       <View className='page-header'>
         <Text className='page-title'>社保养老金计算</Text>
-        <Text className='page-desc'>选择城市、填写信息，估算退休后每月养老金</Text>
+        <Text className='page-desc'>选择城市、填写信息，实时估算退休后每月养老金</Text>
       </View>
 
       <View className='form-card'>
@@ -99,7 +105,6 @@ export default function Pension() {
         </View>
       </View>
 
-      <Button className='btn-primary' onClick={handleCalc}>计算养老金</Button>
       <Text className='form-note'>当前数据为2025年各省人社厅公布数据，2026年计发基数将在下半年陆续更新</Text>
 
       {result && (
@@ -125,9 +130,11 @@ export default function Pension() {
               )}
             </View>
           </View>
-          <View className='tip-card'>
-            以上为估算结果，实际金额以当地社保机构核定为准。养老金遵循"多缴多得、长缴多得"原则。
-          </View>
+
+          {interpretation && (
+            <View className='tip-card'>{interpretation}</View>
+          )}
+
           <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' />
         </>
       )}

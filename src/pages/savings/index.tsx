@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { View, Text, Input, Picker, Button } from '@tarojs/components'
+import { useState, useEffect } from 'react'
+import { View, Text, Input, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import ShareCard from '../../components/ShareCard'
 import { calcSavings, type SavingsResult } from '../../utils/savings'
@@ -21,40 +21,38 @@ export default function Savings() {
   const [lifeExpectancy, setLifeExpectancy] = useState('85')
   const [result, setResult] = useState<SavingsResult | null>(null)
 
+  useEffect(() => {
+    const cAge = Number(currentAge)
+    const rAge = Number(retireAge)
+    if (!currentAge || !retireAge || !currentSavings || !monthlyDeposit || rAge <= cAge) {
+      setResult(null)
+      return
+    }
+    setResult(calcSavings({
+      currentAge: cAge, retireAge: rAge,
+      currentSavings: Number(currentSavings),
+      monthlyDeposit: Number(monthlyDeposit),
+      annualReturn: returnValues[returnIdx],
+      lifeExpectancy: Number(lifeExpectancy)
+    }))
+  }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy])
+
   const shareRows = result ? [
     { label: '退休时总资产', value: `¥${result.totalAtRetirement.toLocaleString()}`, highlight: true },
     { label: '退休后每月可支配', value: `¥${result.monthlyWithdrawal.toLocaleString()}`, highlight: true },
     { label: '距离退休', value: `${result.workingYears}年` },
   ] : []
 
-  const handleCalc = () => {
-    if (!currentAge) { Taro.showToast({ title: '请输入当前年龄', icon: 'none' }); return }
-    if (!retireAge) { Taro.showToast({ title: '请输入退休年龄', icon: 'none' }); return }
-    if (!currentSavings) { Taro.showToast({ title: '请输入当前储蓄', icon: 'none' }); return }
-    if (!monthlyDeposit) { Taro.showToast({ title: '请输入每月存入', icon: 'none' }); return }
-
-    const cAge = Number(currentAge)
-    const rAge = Number(retireAge)
-    if (rAge <= cAge) {
-      Taro.showToast({ title: '退休年龄需大于当前年龄', icon: 'none' })
-      return
-    }
-
-    setResult(calcSavings({
-      currentAge: cAge,
-      retireAge: rAge,
-      currentSavings: Number(currentSavings),
-      monthlyDeposit: Number(monthlyDeposit),
-      annualReturn: returnValues[returnIdx],
-      lifeExpectancy: Number(lifeExpectancy)
-    }))
-  }
+  const interpretation = result ? (() => {
+    const effectiveMonthly = Math.round(result.monthlyWithdrawal * Math.pow(0.97, result.workingYears))
+    return `考虑约 3% 的年通胀率，${result.workingYears} 年后的 ¥${result.monthlyWithdrawal.toLocaleString()} 实际购买力约相当于今天的 ¥${effectiveMonthly.toLocaleString()}。建议每月支出不超过退休前收入的 70%-80%。`
+  })() : ''
 
   return (
     <View className='page'>
       <View className='page-header'>
         <Text className='page-title'>退休储蓄规划</Text>
-        <Text className='page-desc'>评估现有储蓄+持续定投，规划退休后的每月可支配金额</Text>
+        <Text className='page-desc'>填写信息，实时评估退休后每月可支配金额</Text>
       </View>
 
       <View className='form-card'>
@@ -95,8 +93,6 @@ export default function Savings() {
         </View>
       </View>
 
-      <Button className='btn-primary' onClick={handleCalc}>开始规划</Button>
-
       {result && (
         <>
           <View className='result-card'>
@@ -117,9 +113,11 @@ export default function Savings() {
               </View>
             </View>
           </View>
-          <View className='tip-card'>
-            以上为简化估算，未扣除通货膨胀影响。建议退休后每月支出不超过退休前收入的70%-80%。
-          </View>
+
+          {interpretation && (
+            <View className='tip-card'>{interpretation}</View>
+          )}
+
           <ShareCard title='退休储蓄规划结果' rows={shareRows} tip='简化估算供参考' />
         </>
       )}
