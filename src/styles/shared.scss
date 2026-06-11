@@ -1,39 +1,115 @@
-// 页面布局
+// ===== Design Tokens =====
+$radius-lg: 24px;
+$radius-md: 16px;
+$radius-sm: 12px;
+$primary: #6366F1;
+$primary-dark: #4F46E5;
+$gradient-start: #6366F1;
+$gradient-end: #8B5CF6;
+
+// ===== Animations =====
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes numberPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+// ===== Page Layout =====
 .page {
   padding: 0 20px 40px;
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+
+  // Background texture: subtle orbs
+  &::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    left: -60px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
 }
 
 .page-header {
   padding: 32px 0 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .page-title {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 800;
   color: #1E293B;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .page-desc {
   display: block;
   font-size: 26px;
   color: #94A3B8;
-  margin-top: 8px;
+  margin-top: 10px;
   margin-bottom: 24px;
+  line-height: 1.5;
 }
 
-// 表单卡片
+// ===== Glass Cards (simulated) =====
 .form-card {
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-  border: 1px solid rgba(99,102,241,0.06);
+  background: rgba(255,255,255,0.85);
+  border-radius: $radius-lg;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.02),
+    0 8px 32px rgba(99,102,241,0.06);
+  border: 1px solid rgba(255,255,255,0.8);
+  position: relative;
+  z-index: 1;
 }
 
 .form-item {
-  padding: 22px 24px;
-  border-bottom: 1px solid #F1F5F9;
+  padding: 24px 24px;
+  border-bottom: 1px solid rgba(99,102,241,0.06);
 
   &:last-child {
     border-bottom: none;
@@ -44,24 +120,22 @@
   display: block;
   font-size: 22px;
   color: #94A3B8;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .form-input {
-  font-size: 26px;
+  font-size: 28px;
   color: #1E293B;
   padding: 0;
   width: 100%;
   background: transparent;
   font-weight: 400;
-
-  &::placeholder {
-    color: #CBD5E1;
-  }
+  line-height: 1.4;
 }
 
 .form-picker {
-  font-size: 26px;
+  font-size: 28px;
   color: #1E293B;
   display: flex;
   justify-content: space-between;
@@ -74,32 +148,45 @@
   }
 }
 
-// 按钮
+// ===== Primary Button =====
 .btn-primary {
   width: 100%;
   background: linear-gradient(135deg, #6366F1, #8B5CF6);
   color: #fff;
   font-size: 32px;
   font-weight: 700;
-  border-radius: 16px;
+  border-radius: $radius-md;
   padding: 28px 0;
   margin-top: 24px;
   border: none;
   text-align: center;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  z-index: 1;
 
   &::after { border: none; }
-  &:active { opacity: 0.9; }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(99,102,241,0.2);
+  }
 }
 
-// 结果卡片
+// ===== Result Card =====
 .result-card {
-  background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
-  border-radius: 24px;
-  padding: 36px 24px;
+  background: linear-gradient(135deg, rgba(238,242,255,0.9), rgba(224,231,255,0.9));
+  border-radius: $radius-lg;
+  padding: 40px 28px;
   text-align: center;
   margin-top: 24px;
-  box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.02),
+    0 8px 32px rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.08);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.5s ease-out;
 }
 
 .result-label {
@@ -108,14 +195,18 @@
   display: block;
   margin-bottom: 12px;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .result-amount {
-  font-size: 56px;
+  font-size: 64px;
   font-weight: 800;
   color: #1E293B;
   display: block;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  animation: numberPop 0.6s ease-out 0.2s both;
 }
 
 .result-unit {
@@ -125,25 +216,28 @@
 }
 
 .result-main {
-  font-size: 52px;
+  font-size: 56px;
   font-weight: 800;
   color: #1E293B;
   display: block;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  animation: numberPop 0.6s ease-out 0.2s both;
 }
 
 .result-sub {
   font-size: 26px;
   color: #64748B;
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
+  font-weight: 500;
 }
 
 .result-breakdown {
   display: flex;
   justify-content: center;
-  gap: 36px;
-  margin-top: 28px;
+  gap: 40px;
+  margin-top: 32px;
   padding-top: 28px;
   border-top: 1px solid rgba(99,102,241,0.12);
 }
@@ -153,7 +247,7 @@
 }
 
 .breakdown-val {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 700;
   color: #1E293B;
   display: block;
@@ -163,18 +257,21 @@
   font-size: 22px;
   color: #94A3B8;
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
-// 提示卡片
+// ===== Tip Card =====
 .tip-card {
-  background: #FFFBEB;
-  border-radius: 16px;
-  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(255,251,235,0.9), rgba(254,243,199,0.9));
+  border-radius: $radius-md;
+  padding: 18px 20px;
   margin-top: 16px;
   font-size: 24px;
   color: #B45309;
   line-height: 1.6;
+  border: 1px solid rgba(245,158,11,0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .form-note {
