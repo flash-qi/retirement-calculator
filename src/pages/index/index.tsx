@@ -31,8 +31,12 @@ export default function Index() {
   const [showPrivacy, setShowPrivacy] = useState(false)
 
   useEffect(() => {
-    const accepted = Taro.getStorageSync(PRIVACY_KEY)
-    if (!accepted) {
+    try {
+      const accepted = Taro.getStorageSync(PRIVACY_KEY)
+      if (!accepted) {
+        setShowPrivacy(true)
+      }
+    } catch (_) {
       setShowPrivacy(true)
     }
   }, [])
