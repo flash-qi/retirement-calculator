@@ -1,11 +1,6 @@
-// ===== Design Tokens =====
+// ===== Design Tokens: Soft Warm =====
 $radius-lg: 24px;
 $radius-md: 16px;
-$radius-sm: 12px;
-$primary: #6366F1;
-$primary-dark: #4F46E5;
-$gradient-start: #6366F1;
-$gradient-end: #8B5CF6;
 
 // ===== Animations =====
 @keyframes fadeInUp {
@@ -13,75 +8,33 @@ $gradient-end: #8B5CF6;
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 @keyframes numberPop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+  50% { transform: scale(1.04); }
   100% { transform: scale(1); }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 // ===== Page Layout =====
 .page {
   padding: 0 20px 40px;
   min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-
-  // Background texture: subtle orbs
-  &::before {
-    content: '';
-    position: absolute;
-    top: -120px;
-    right: -80px;
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 10%;
-    left: -60px;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
 }
 
 .page-header {
-  padding: 32px 0 8px;
+  padding: 36px 0 8px;
   position: relative;
   z-index: 1;
 }
 
 .page-title {
-  font-size: 46px;
+  font-size: 44px;
   font-weight: 800;
-  color: #1E293B;
+  color: #2E2A2A;
   letter-spacing: -0.5px;
   line-height: 1.2;
 }
@@ -89,44 +42,42 @@ $gradient-end: #8B5CF6;
 .page-desc {
   display: block;
   font-size: 26px;
-  color: #94A3B8;
+  color: #9C8F8A;
   margin-top: 10px;
   margin-bottom: 24px;
   line-height: 1.5;
 }
 
-// ===== Glass Cards (simulated) =====
+// ===== Warm White Card =====
 .form-card {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: $radius-lg;
   box-shadow:
-    0 2px 4px rgba(0,0,0,0.02),
-    0 8px 32px rgba(99,102,241,0.06);
-  border: 1px solid rgba(255,255,255,0.8);
+    0 2px 4px rgba(255, 107, 107, 0.03),
+    0 8px 32px rgba(255, 107, 107, 0.06);
+  border: 1px solid rgba(255, 142, 114, 0.1);
   position: relative;
   z-index: 1;
 }
 
 .form-item {
   padding: 24px 24px;
-  border-bottom: 1px solid rgba(99,102,241,0.06);
+  border-bottom: 1px solid rgba(255, 142, 114, 0.08);
 
-  &:last-child {
-    border-bottom: none;
-  }
+  &:last-child { border-bottom: none; }
 }
 
 .form-label {
   display: block;
   font-size: 22px;
-  color: #94A3B8;
+  color: #9C8F8A;
   margin-bottom: 8px;
   font-weight: 500;
 }
 
 .form-input {
   font-size: 28px;
-  color: #1E293B;
+  color: #2E2A2A;
   padding: 0;
   width: 100%;
   background: transparent;
@@ -136,22 +87,19 @@ $gradient-end: #8B5CF6;
 
 .form-picker {
   font-size: 28px;
-  color: #1E293B;
+  color: #2E2A2A;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 400;
 
-  .picker-arr {
-    color: #CBD5E1;
-    font-size: 24px;
-  }
+  .picker-arr { color: #C4B5AD; font-size: 24px; }
 }
 
-// ===== Primary Button =====
+// ===== Coral Button =====
 .btn-primary {
   width: 100%;
-  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
   color: #fff;
   font-size: 32px;
   font-weight: 700;
@@ -160,7 +108,7 @@ $gradient-end: #8B5CF6;
   margin-top: 24px;
   border: none;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.35);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   position: relative;
   z-index: 1;
@@ -169,21 +117,21 @@ $gradient-end: #8B5CF6;
 
   &:active {
     transform: scale(0.97);
-    box-shadow: 0 2px 8px rgba(99,102,241,0.2);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
   }
 }
 
 // ===== Result Card =====
 .result-card {
-  background: linear-gradient(135deg, rgba(238,242,255,0.9), rgba(224,231,255,0.9));
+  background: linear-gradient(135deg, #FFF5F0, #FFEEE5);
   border-radius: $radius-lg;
   padding: 40px 28px;
   text-align: center;
   margin-top: 24px;
   box-shadow:
-    0 2px 4px rgba(0,0,0,0.02),
-    0 8px 32px rgba(99,102,241,0.08);
-  border: 1px solid rgba(99,102,241,0.08);
+    0 2px 4px rgba(255, 107, 107, 0.03),
+    0 8px 32px rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 142, 114, 0.12);
   position: relative;
   z-index: 1;
   animation: fadeInUp 0.5s ease-out;
@@ -191,18 +139,17 @@ $gradient-end: #8B5CF6;
 
 .result-label {
   font-size: 26px;
-  color: #6366F1;
+  color: #E55A5A;
   display: block;
   margin-bottom: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 
 .result-amount {
   font-size: 64px;
   font-weight: 800;
-  color: #1E293B;
+  color: #2E2A2A;
   display: block;
   letter-spacing: -1.5px;
   line-height: 1.1;
@@ -212,13 +159,13 @@ $gradient-end: #8B5CF6;
 .result-unit {
   font-size: 28px;
   font-weight: 500;
-  color: #6366F1;
+  color: #E55A5A;
 }
 
 .result-main {
   font-size: 56px;
   font-weight: 800;
-  color: #1E293B;
+  color: #2E2A2A;
   display: block;
   letter-spacing: -1px;
   line-height: 1.1;
@@ -227,7 +174,7 @@ $gradient-end: #8B5CF6;
 
 .result-sub {
   font-size: 26px;
-  color: #64748B;
+  color: #6B5E5A;
   display: block;
   margin-top: 8px;
   font-weight: 500;
@@ -239,37 +186,35 @@ $gradient-end: #8B5CF6;
   gap: 40px;
   margin-top: 32px;
   padding-top: 28px;
-  border-top: 1px solid rgba(99,102,241,0.12);
+  border-top: 1px solid rgba(255, 142, 114, 0.15);
 }
 
-.breakdown-item {
-  text-align: center;
-}
+.breakdown-item { text-align: center; }
 
 .breakdown-val {
   font-size: 34px;
   font-weight: 700;
-  color: #1E293B;
+  color: #2E2A2A;
   display: block;
 }
 
 .breakdown-lbl {
   font-size: 22px;
-  color: #94A3B8;
+  color: #9C8F8A;
   display: block;
   margin-top: 6px;
 }
 
 // ===== Tip Card =====
 .tip-card {
-  background: linear-gradient(135deg, rgba(255,251,235,0.9), rgba(254,243,199,0.9));
+  background: #FFFBEB;
   border-radius: $radius-md;
   padding: 18px 20px;
   margin-top: 16px;
   font-size: 24px;
   color: #B45309;
   line-height: 1.6;
-  border: 1px solid rgba(245,158,11,0.1);
+  border: 1px solid rgba(245, 158, 11, 0.1);
   position: relative;
   z-index: 1;
 }
@@ -277,7 +222,7 @@ $gradient-end: #8B5CF6;
 .form-note {
   display: block;
   font-size: 22px;
-  color: #94A3B8;
+  color: #9C8F8A;
   margin-top: 12px;
   line-height: 1.5;
   text-align: center;

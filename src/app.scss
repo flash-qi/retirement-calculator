@@ -1,27 +1,21 @@
 page {
-  --primary: #6366F1;
-  --primary-light: #EEF2FF;
-  --gradient-start: #6366F1;
-  --gradient-mid: #8B5CF6;
-  --gradient-end: #A78BFA;
-  --accent: #10B981;
+  --coral: #FF6B6B;
+  --coral-dark: #E55A5A;
+  --peach: #FF8E72;
+  --warm-bg: #FFF5F0;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --beige: #FFF1EA;
+  --charcoal: #2E2A2A;
+  --warm-gray: #6B5E5A;
+  --warm-muted: #9C8F8A;
   --gold: #F59E0B;
   --gold-light: #FFFBEB;
-  --text: #1E293B;
-  --text-secondary: #64748B;
-  --text-muted: #94A3B8;
-  --bg: #F8FAFC;
-  --card: #FFFFFF;
-  --border: #F1F5F9;
-  --radius: 24px;
-  --radius-sm: 16px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-  --shadow: 0 4px 24px rgba(0,0,0,0.06);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,0.08);
+  --shadow-coral: 0 4px 24px rgba(255, 107, 107, 0.08);
+  --shadow-lg: 0 8px 40px rgba(255, 107, 107, 0.12);
 
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
-  background-color: var(--bg);
+  background: linear-gradient(180deg, #FFF5F0 0%, #FFEEE5 30%, #FFE8DE 100%);
   font-size: 28px;
-  color: var(--text);
+  color: var(--charcoal);
   line-height: 1.5;
 }

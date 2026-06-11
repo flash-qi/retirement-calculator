@@ -4,12 +4,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 26px;
-  color: #1E293B;
+  font-size: 28px;
+  color: #2E2A2A;
   font-weight: 400;
 
-  .placeholder { color: #CBD5E1; }
-  .arrow { font-size: 24px; color: #CBD5E1; }
+  .placeholder { color: #C4B5AD; }
+  .arrow { font-size: 24px; color: #C4B5AD; }
 }
 
 .picker-dropdown {
@@ -20,7 +20,7 @@
   z-index: 100;
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 40px rgba(255,107,107,0.08);
   overflow: hidden;
 }
 
@@ -28,12 +28,12 @@
   display: flex;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid rgba(255,142,114,0.08);
 }
 
 .back-arrow {
   font-size: 44px;
-  color: #6366F1;
+  color: #FF6B6B;
   margin-right: 16px;
   line-height: 1;
 }
@@ -41,7 +41,7 @@
 .dropdown-title {
   font-size: 32px;
   font-weight: 700;
-  color: #1E293B;
+  color: #2E2A2A;
 }
 
 .city-list { max-height: 520px; padding: 0; }
@@ -52,13 +52,12 @@
   align-items: center;
   padding: 22px 24px;
 
-  &:not(:last-child) { border-bottom: 1px solid #F1F5F9; }
-
-  &.active .city-name { color: #6366F1; font-weight: 600; }
+  &:not(:last-child) { border-bottom: 1px solid rgba(255,142,114,0.06); }
+  &.active .city-name { color: #FF6B6B; font-weight: 600; }
 }
 
-.city-name { font-size: 28px; color: #1E293B; }
-.city-base { font-size: 26px; color: #94A3B8; }
+.city-name { font-size: 28px; color: #2E2A2A; }
+.city-base { font-size: 26px; color: #9C8F8A; }
 .city-note {
   display: inline-block;
   font-size: 22px;
