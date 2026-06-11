@@ -1,13 +1,13 @@
-.share-card { margin-top: 16px; }
-.share-canvas { position: fixed; left: -9999px; top: 0; width: 750px; height: 1000px; }
+.share-card { margin-top: 24rpx; }
+.share-canvas { position: fixed; left: -9999rpx; top: 0; width: 750rpx; height: 1000rpx; }
 
 .btn-generate {
   width: 100%;
   background: linear-gradient(135deg, #FF6B6B, #FF8E72);
   color: #fff;
-  font-size: 30px; font-weight: 700;
-  border-radius: 16px; padding: 24px 0; border: none;
-  box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+  font-size: 30rpx; font-weight: 700;
+  border-radius: 16rpx; padding: 28rpx 0; border: none;
+  box-shadow: 0 4rpx 20rpx rgba(255,107,107,0.3);
 
   &::after { border: none; }
   &:active { opacity: 0.9; }
@@ -16,33 +16,33 @@
 .preview-mask {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.8); z-index: 1000;
-  display: flex; align-items: center; justify-content: center; padding: 40px;
+  display: flex; align-items: center; justify-content: center; padding: 48rpx;
 }
 
 .preview-box {
-  background: #fff; border-radius: 24px; padding: 32px;
-  width: 100%; max-width: 560px;
+  background: #fff; border-radius: 24rpx; padding: 36rpx;
+  width: 100%; max-width: 560rpx;
 }
 
-.preview-image { width: 100%; border-radius: 12px; display: block; }
+.preview-image { width: 100%; border-radius: 16rpx; display: block; }
 
 .preview-tip {
-  text-align: center; font-size: 24px; color: #9C8F8A; margin: 16px 0;
+  text-align: center; font-size: 26rpx; color: #9C8F8A; margin: 20rpx 0;
 }
 
 .btn-save {
   width: 100%;
   background: linear-gradient(135deg, #FF6B6B, #FF8E72);
-  color: #fff; font-size: 30px; font-weight: 700;
-  border-radius: 16px; padding: 22px 0; border: none; margin-bottom: 12px;
-  box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+  color: #fff; font-size: 30rpx; font-weight: 700;
+  border-radius: 16rpx; padding: 26rpx 0; border: none; margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(255,107,107,0.3);
 
   &::after { border: none; }
 }
 
 .btn-close {
-  width: 100%; background: #F5F0ED; color: #6B5E5A; font-size: 28px;
-  border-radius: 16px; padding: 18px 0; border: none;
+  width: 100%; background: #F5F0ED; color: #6B5E5A; font-size: 28rpx;
+  border-radius: 16rpx; padding: 22rpx 0; border: none;
 
   &::after { border: none; }
 }
