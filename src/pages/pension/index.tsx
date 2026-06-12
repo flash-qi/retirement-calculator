@@ -41,6 +41,13 @@ export default function Pension() {
     }))
   }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge])
 
+  // Auto-scroll to result when it appears
+  useEffect(() => {
+    if (result) {
+      setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 100)
+    }
+  }, [result])
+
   const shareRows = result ? [
     { label: '基础养老金', value: `¥${result.basicPension.toLocaleString()}` },
     { label: '个人账户养老金', value: `¥${result.accountPension.toLocaleString()}` },

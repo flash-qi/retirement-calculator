@@ -37,6 +37,12 @@ export default function RetireAge() {
     setResult(calcRetireAge(new Date(birthDate), jobType))
   }, [birthDate, jobType])
 
+  useEffect(() => {
+    if (result) {
+      setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 100)
+    }
+  }, [result])
+
   return (
     <View className='page'>
       <View className='page-header'>

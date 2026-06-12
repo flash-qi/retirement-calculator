@@ -37,6 +37,12 @@ export default function Savings() {
     }))
   }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy])
 
+  useEffect(() => {
+    if (result) {
+      setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 100)
+    }
+  }, [result])
+
   const shareRows = result ? [
     { label: '退休时总资产', value: `¥${result.totalAtRetirement.toLocaleString()}`, highlight: true },
     { label: '退休后每月可支配', value: `¥${result.monthlyWithdrawal.toLocaleString()}`, highlight: true },
