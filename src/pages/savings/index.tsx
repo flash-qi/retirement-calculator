@@ -7,6 +7,8 @@ import './index.scss'
 
 const returnOptions = ['保守 2%', '稳健 4%', '平衡 6%', '进取 8%']
 const returnValues = [0.02, 0.04, 0.06, 0.08]
+const inflationOptions = ['0% (不考虑)', '2% (低通胀)', '3% (温和通胀)', '4% (较高通胀)', '5% (高通胀)']
+const inflationValues = [0, 0.02, 0.03, 0.04, 0.05]
 
 export default function Savings() {
   Taro.useShareAppMessage(() => ({
@@ -18,6 +20,7 @@ export default function Savings() {
   const [currentSavings, setCurrentSavings] = useState('')
   const [monthlyDeposit, setMonthlyDeposit] = useState('')
   const [returnIdx, setReturnIdx] = useState(1)
+  const [inflationIdx, setInflationIdx] = useState(2) // default 3%
   const [lifeExpectancy, setLifeExpectancy] = useState('85')
   const [result, setResult] = useState<SavingsResult | null>(null)
 
@@ -49,10 +52,14 @@ export default function Savings() {
     { label: '距离退休', value: `${result.workingYears}年` },
   ] : []
 
-  const interpretation = result ? (() => {
-    const effectiveMonthly = Math.round(result.monthlyWithdrawal * Math.pow(0.97, result.workingYears))
-    return `考虑约 3% 的年通胀率，${result.workingYears} 年后的 ¥${result.monthlyWithdrawal.toLocaleString()} 实际购买力约相当于今天的 ¥${effectiveMonthly.toLocaleString()}。建议每月支出不超过退休前收入的 70%-80%。`
+  const inflRate = inflationValues[inflationIdx]
+  const interpretation = result && inflRate > 0 ? (() => {
+    const effectiveMonthly = Math.round(result.monthlyWithdrawal * Math.pow(1 - inflRate, result.workingYears))
+    return `${result.workingYears} 年后 ¥${result.monthlyWithdrawal.toLocaleString()}（名义值）的实际购买力约相当于今天的 ¥${effectiveMonthly.toLocaleString()}。`
   })() : ''
+  const realValue = result && inflRate > 0
+    ? Math.round(result.monthlyWithdrawal * Math.pow(1 - inflRate, result.workingYears))
+    : null
 
   return (
     <View className='page'>
@@ -93,6 +100,16 @@ export default function Savings() {
           </Picker>
         </View>
         <View className='form-item'>
+          <Text className='form-label'>预期年通胀率</Text>
+          <Picker mode='selector' range={inflationOptions}
+            value={inflationIdx} onChange={(e) => setInflationIdx(Number(e.detail.value))}>
+            <View className='form-picker'>
+              <Text>{inflationOptions[inflationIdx]}</Text>
+              <Text className='picker-arr'>›</Text>
+            </View>
+          </Picker>
+        </View>
+        <View className='form-item'>
           <Text className='form-label'>预期寿命（岁）</Text>
           <Input className='form-input' type='digit'
             value={lifeExpectancy} onInput={(e) => setLifeExpectancy(e.detail.value)} />
@@ -107,15 +124,17 @@ export default function Savings() {
             <View className='result-breakdown'>
               <View className='breakdown-item'>
                 <Text className='breakdown-val'>¥{result.monthlyWithdrawal.toLocaleString()}</Text>
-                <Text className='breakdown-lbl'>退休后每月可支配</Text>
+                <Text className='breakdown-lbl'>名义每月可支配</Text>
               </View>
+              {realValue && (
+                <View className='breakdown-item'>
+                  <Text className='breakdown-val' style='color:#FF6B6B'>¥{realValue.toLocaleString()}</Text>
+                  <Text className='breakdown-lbl'>相当今天购买力</Text>
+                </View>
+              )}
               <View className='breakdown-item'>
                 <Text className='breakdown-val'>{result.workingYears}年</Text>
                 <Text className='breakdown-lbl'>距离退休</Text>
-              </View>
-              <View className='breakdown-item'>
-                <Text className='breakdown-val'>{result.retirementYears}年</Text>
-                <Text className='breakdown-lbl'>退休生活时长</Text>
               </View>
             </View>
           </View>

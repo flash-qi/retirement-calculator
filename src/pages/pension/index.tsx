@@ -23,6 +23,10 @@ export default function Pension() {
   const [retireAge, setRetireAge] = useState('60')
   const [result, setResult] = useState<PensionResult | null>(null)
 
+  // P1-3: Scenario comparison (in-memory only)
+  interface Scenario { label: string; pension: number; replacementRate: number; basic: number; account: number }
+  const [scenarios, setScenarios] = useState<Scenario[]>([])
+
   // Instant calc when all required fields are filled
   useEffect(() => {
     if (!city || !salary || !conYears || !accountBal) {
@@ -138,8 +142,105 @@ export default function Pension() {
             </View>
           </View>
 
+          {salary && (
+            <View className='gauge-card'>
+              <Text className='gauge-label'>养老金替代率</Text>
+              <View className='gauge-row'>
+                <Text className='gauge-pct'>{Math.round(result.totalPension / Number(salary) * 100)}%</Text>
+                <Text className='gauge-level'>
+                  {Math.round(result.totalPension / Number(salary) * 100) >= 70 ? '优秀' :
+                   Math.round(result.totalPension / Number(salary) * 100) >= 50 ? '一般' : '偏低'}
+                </Text>
+              </View>
+              <View className='gauge-track'>
+                <View className='gauge-fill' style={{
+                  width: `${Math.min(Math.round(result.totalPension / Number(salary) * 100), 100)}%`,
+                  background: Math.round(result.totalPension / Number(salary) * 100) >= 70 ? '#10B981' :
+                    Math.round(result.totalPension / Number(salary) * 100) >= 50 ? '#F59E0B' : '#FF6B6B'
+                }} />
+              </View>
+              <View className='gauge-scale'>
+                <Text className='gauge-tick'>0%</Text>
+                <Text className='gauge-tick'>50%</Text>
+                <Text className='gauge-tick t70'>70%</Text>
+                <Text className='gauge-tick'>100%</Text>
+              </View>
+              <Text className='gauge-hint'>70% 为国际劳工组织建议的最低替代率</Text>
+            </View>
+          )}
+
           {interpretation && (
             <View className='tip-card'>{interpretation}</View>
+          )}
+
+          {salary && result && (
+            <View className='compare-section'>
+              <View
+                className='btn-save-scenario'
+                onClick={() => {
+                  const rate = Math.round(result.totalPension / Number(salary) * 100)
+                  const label = `方案${scenarios.length + 1}`
+                  const exists = scenarios.find(s => s.label === label)
+                  const newLabel = `方案${scenarios.length + 1}`
+                  setScenarios([...scenarios, {
+                    label: scenarios.length < 3 ? newLabel : label,
+                    pension: result.totalPension,
+                    replacementRate: rate,
+                    basic: result.basicPension,
+                    account: result.accountPension
+                  }])
+                }}
+              >
+                保存为方案{scenarios.length < 3 ? scenarios.length + 1 : scenarios.length}
+              </View>
+
+              {scenarios.length >= 2 && (
+                <View className='scenario-compare'>
+                  <View className='scenario-header'>
+                    <Text className='scenario-title'>方案对比</Text>
+                    <Text
+                      className='scenario-clear'
+                      onClick={() => setScenarios([])}
+                    >清除</Text>
+                  </View>
+                  <View className='scenario-table'>
+                    <View className='scenario-row hdr'>
+                      <Text className='scenario-cell'>指标</Text>
+                      {scenarios.map((s) => (
+                        <Text key={s.label} className='scenario-cell'>{s.label}</Text>
+                      ))}
+                    </View>
+                    <View className='scenario-row'>
+                      <Text className='scenario-cell'>月养老金</Text>
+                      {scenarios.map((s) => (
+                        <Text key={s.label} className='scenario-cell val'>¥{s.pension.toLocaleString()}</Text>
+                      ))}
+                    </View>
+                    <View className='scenario-row'>
+                      <Text className='scenario-cell'>替代率</Text>
+                      {scenarios.map((s) => (
+                        <Text key={s.label} className='scenario-cell val' style={{ color: s.replacementRate >= 70 ? '#10B981' : s.replacementRate >= 50 ? '#F59E0B' : '#FF6B6B' }}>
+                          {s.replacementRate}%
+                        </Text>
+                      ))}
+                    </View>
+                    <View className='scenario-row'>
+                      <Text className='scenario-cell'>基础养老金</Text>
+                      {scenarios.map((s) => (
+                        <Text key={s.label} className='scenario-cell val'>¥{s.basic.toLocaleString()}</Text>
+                      ))}
+                    </View>
+                    <View className='scenario-row'>
+                      <Text className='scenario-cell'>个人账户</Text>
+                      {scenarios.map((s) => (
+                        <Text key={s.label} className='scenario-cell val'>¥{s.account.toLocaleString()}</Text>
+                      ))}
+                    </View>
+                  </View>
+                  <Text className='scenario-hint'>对比数据仅在当前页面保存，离开后自动清除</Text>
+                </View>
+              )}
+            </View>
           )}
 
           <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' />
