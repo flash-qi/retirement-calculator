@@ -3,7 +3,7 @@
 
 .btn-generate {
   width: 100%;
-  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  background: linear-gradient(135deg, #C2A56B, #B89B5E);
   color: #fff;
   font-size: 30rpx; font-weight: 700;
   border-radius: 16rpx; padding: 28rpx 0; border: none;
@@ -27,12 +27,12 @@
 .preview-image { width: 100%; border-radius: 16rpx; display: block; }
 
 .preview-tip {
-  text-align: center; font-size: 26rpx; color: #9C8F8A; margin: 20rpx 0;
+  text-align: center; font-size: 26rpx; color: #A8A098; margin: 20rpx 0;
 }
 
 .btn-save {
   width: 100%;
-  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  background: linear-gradient(135deg, #C2A56B, #B89B5E);
   color: #fff; font-size: 30rpx; font-weight: 700;
   border-radius: 16rpx; padding: 26rpx 0; border: none; margin-bottom: 16rpx;
   box-shadow: 0 4rpx 16rpx rgba(255,107,107,0.3);
@@ -41,7 +41,7 @@
 }
 
 .btn-close {
-  width: 100%; background: #F5F0ED; color: #6B5E5A; font-size: 28rpx;
+  width: 100%; background: #F2EFEA; color: #7E6F66; font-size: 28rpx;
   border-radius: 16rpx; padding: 22rpx 0; border: none;
 
   &::after { border: none; }

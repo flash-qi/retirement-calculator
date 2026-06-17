@@ -175,33 +175,31 @@ export default function Pension() {
 
           {salary && result && (
             <View className='compare-section'>
-              <View
-                className='btn-save-scenario'
-                onClick={() => {
-                  const rate = Math.round(result.totalPension / Number(salary) * 100)
-                  const label = `方案${scenarios.length + 1}`
-                  const exists = scenarios.find(s => s.label === label)
-                  const newLabel = `方案${scenarios.length + 1}`
-                  setScenarios([...scenarios, {
-                    label: scenarios.length < 3 ? newLabel : label,
-                    pension: result.totalPension,
-                    replacementRate: rate,
-                    basic: result.basicPension,
-                    account: result.accountPension
-                  }])
-                }}
-              >
-                保存为方案{scenarios.length < 3 ? scenarios.length + 1 : scenarios.length}
-              </View>
+              {scenarios.length < 3 && (
+                <View
+                  className='btn-save-scenario'
+                  onClick={() => {
+                    const rate = Math.round(result.totalPension / Number(salary) * 100)
+                    setScenarios([...scenarios, {
+                      label: `方案${scenarios.length + 1}`,
+                      pension: result.totalPension,
+                      replacementRate: rate,
+                      basic: result.basicPension,
+                      account: result.accountPension
+                    }])
+                  }}
+                >
+                  保存当前参数（{3 - scenarios.length} 次可用）
+                </View>
+              )}
 
-              {scenarios.length >= 2 && (
+              {scenarios.length > 0 && (
                 <View className='scenario-compare'>
                   <View className='scenario-header'>
-                    <Text className='scenario-title'>方案对比</Text>
-                    <Text
-                      className='scenario-clear'
-                      onClick={() => setScenarios([])}
-                    >清除</Text>
+                    <Text className='scenario-title'>
+                      {scenarios.length === 1 ? '已保存方案' : '方案对比'}
+                    </Text>
+                    <Text className='scenario-clear' onClick={() => setScenarios([])}>清除</Text>
                   </View>
                   <View className='scenario-table'>
                     <View className='scenario-row hdr'>
@@ -237,7 +235,6 @@ export default function Pension() {
                       ))}
                     </View>
                   </View>
-                  <Text className='scenario-hint'>对比数据仅在当前页面保存，离开后自动清除</Text>
                 </View>
               )}
             </View>
