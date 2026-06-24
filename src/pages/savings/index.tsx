@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { View, Text, Input, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import ShareCard from '../../components/ShareCard'
@@ -42,10 +42,12 @@ export default function Savings() {
     }))
   }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy])
 
+  const scrolledRef = useRef(false)
   useEffect(() => {
-    if (result) {
-      setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 100)
-    }
+    if (!result) { scrolledRef.current = false; return }
+    if (scrolledRef.current) return
+    scrolledRef.current = true
+    setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 300)
   }, [result])
 
   const shareRows = result ? [

@@ -188,16 +188,16 @@ export function drawDonutChart(
   ctx.fillText('构成', cx, cy + 14)
 
   // Legend
-  const legendY = h - 20
+  const legendY = h - 32
   const legendGap = (w - 40) / segments.length
   ctx.textAlign = 'center'
-  ctx.font = '9px sans-serif'
+  ctx.font = '8px sans-serif'
   segments.forEach((seg, i) => {
     const lx = 20 + legendGap * i + legendGap / 2
     ctx.fillStyle = seg.color || COLORS.chart[i % COLORS.chart.length]
-    ctx.fillRect(lx - 14, legendY - 6, 8, 8)
+    ctx.fillRect(lx - 16, legendY - 6, 10, 10)
     ctx.fillStyle = COLORS.text
-    ctx.fillText(seg.label, lx + 6, legendY + 2)
+    ctx.fillText(seg.label, lx - 4, legendY + 10)
   })
 
   ctx.restore()

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { View, Text, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { calcRetireAge, type JobType, type RetireAgeResult } from '../../utils/retireAge'
@@ -37,10 +37,12 @@ export default function RetireAge() {
     setResult(calcRetireAge(new Date(birthDate), jobType))
   }, [birthDate, jobType])
 
+  const scrolledRef = useRef(false)
   useEffect(() => {
-    if (result) {
-      setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 100)
-    }
+    if (!result) { scrolledRef.current = false; return }
+    if (scrolledRef.current) return
+    scrolledRef.current = true
+    setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 300)
   }, [result])
 
   return (
