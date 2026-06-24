@@ -7,6 +7,7 @@ interface Props {
   title: string
   rows: { label: string; value: string; highlight?: boolean }[]
   tip?: string
+  onPreviewChange?: (showing: boolean) => void
 }
 
 function drawRoundRect(ctx: any, x: number, y: number, w: number, h: number, r: number) {
@@ -23,7 +24,7 @@ function drawRoundRect(ctx: any, x: number, y: number, w: number, h: number, r: 
   ctx.closePath()
 }
 
-export default function ShareCard({ title, rows, tip }: Props) {
+export default function ShareCard({ title, rows, tip, onPreviewChange }: Props) {
   const [imagePath, setImagePath] = useState('')
   const canvasId = 'shareCanvas'
 
@@ -146,6 +147,7 @@ export default function ShareCard({ title, rows, tip }: Props) {
           canvas,
           success: (result) => {
             setImagePath(result.tempFilePath)
+            onPreviewChange?.(true)
           },
           fail: () => {
             Taro.showToast({ title: '生成失败，请重试', icon: 'none' })
@@ -201,6 +203,7 @@ export default function ShareCard({ title, rows, tip }: Props) {
       success: () => {
         Taro.showToast({ title: '已保存到相册', icon: 'success' })
         setImagePath('')
+        onPreviewChange?.(false)
       },
       fail: (err) => {
         if (err.errMsg.includes('auth deny')) {
@@ -229,7 +232,7 @@ export default function ShareCard({ title, rows, tip }: Props) {
       </View>
 
       {imagePath && (
-        <View className='preview-mask' onClick={() => setImagePath('')}>
+        <View className='preview-mask' onClick={() => { setImagePath(''); onPreviewChange?.(false) }}>
           <View className='preview-box' onClick={(e) => e.stopPropagation()}>
             <Image className='preview-image' src={imagePath} mode='widthFix' />
             <View className='preview-tip'>长按图片保存到相册</View>

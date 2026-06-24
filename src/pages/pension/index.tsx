@@ -27,6 +27,7 @@ export default function Pension() {
   // P1-3: Scenario comparison (in-memory only)
   interface Scenario { label: string; pension: number; replacementRate: number; basic: number; account: number }
   const [scenarios, setScenarios] = useState<Scenario[]>([])
+  const [previewVisible, setPreviewVisible] = useState(false)
 
   // Instant calc when all required fields are filled
   useEffect(() => {
@@ -245,7 +246,7 @@ export default function Pension() {
             </View>
           )}
 
-          {result && (
+          {result && !previewVisible && (
             <ChartCard id='pensionDonut' draw={(ctx: any, w: number, h: number, dpr: number) => {
               const segments = [
                 { label: '基础养老金', value: result.basicPension, color: '#C2A56B' },
@@ -259,7 +260,7 @@ export default function Pension() {
             }} />
           )}
 
-          <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' />
+          <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' onPreviewChange={setPreviewVisible} />
         </>
       )}
     </View>

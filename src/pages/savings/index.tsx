@@ -25,6 +25,7 @@ export default function Savings() {
   const [inflationIdx, setInflationIdx] = useState(2) // default 3%
   const [lifeExpectancy, setLifeExpectancy] = useState('85')
   const [result, setResult] = useState<SavingsResult | null>(null)
+  const [previewVisible, setPreviewVisible] = useState(false)
 
   useEffect(() => {
     const cAge = Number(currentAge)
@@ -176,11 +177,11 @@ export default function Savings() {
             <View className='tip-card'>{interpretation}</View>
           )}
 
-          {drawSavingsChart && (
+          {drawSavingsChart && !previewVisible && (
             <ChartCard id='savingsChart' draw={drawSavingsChart} />
           )}
 
-          <ShareCard title='退休储蓄规划结果' rows={shareRows} tip='简化估算供参考' />
+          <ShareCard title='退休储蓄规划结果' rows={shareRows} tip='简化估算供参考' onPreviewChange={setPreviewVisible} />
         </>
       )}
     </View>

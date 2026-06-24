@@ -20,6 +20,7 @@ export default function RetireAge() {
   const [jobType, setJobType] = useState<JobType>('male_worker')
   const [jobIndex, setJobIndex] = useState(0)
   const [result, setResult] = useState<RetireAgeResult | null>(null)
+  const [previewVisible, setPreviewVisible] = useState(false)
 
   const shareRows = result ? [
     { label: '原法定退休年龄', value: `${result.originalAge}周岁` },
@@ -109,7 +110,7 @@ export default function RetireAge() {
           <View className='tip-card'>
             符合条件可选择弹性提前退休（最多提前3年）或弹性延迟退休（最多延迟3年）
           </View>
-          <ShareCard title='延迟退休年龄查询结果' rows={shareRows} tip='弹性退休政策请参考当地人社部门' />
+          <ShareCard title='延迟退休年龄查询结果' rows={shareRows} tip='弹性退休政策请参考当地人社部门' onPreviewChange={setPreviewVisible} />
         </>
       )}
     </View>
