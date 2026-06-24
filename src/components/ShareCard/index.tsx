@@ -28,12 +28,12 @@ export default function ShareCard({ title, rows, tip }: Props) {
   const canvasId = 'shareCanvas'
 
   const drawCard = (ctx: any, w: number, h: number) => {
-    const P = 24
+    const P = 28
 
     // Background gradient
     const grad = ctx.createLinearGradient(0, 0, 0, h)
     grad.addColorStop(0, '#FBF8F2')
-    grad.addColorStop(0.35, '#FDF9F0')
+    grad.addColorStop(0.3, '#FDF9F0')
     grad.addColorStop(1, '#FBF8F2')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, w, h)
@@ -47,69 +47,78 @@ export default function ShareCard({ title, rows, tip }: Props) {
 
     // App name
     ctx.fillStyle = '#C2A56B'
-    ctx.font = '15px sans-serif'
+    ctx.font = '14px sans-serif'
     ctx.textAlign = 'left'
-    ctx.fillText('退休计算器', P, 36)
+    ctx.fillText('退休计算器', P, 38)
 
     // Title
     ctx.fillStyle = '#2E2A25'
-    ctx.font = 'bold 22px sans-serif'
-    ctx.fillText(title, P, 72)
+    ctx.font = 'bold 20px sans-serif'
+    ctx.fillText(title, P, 68)
 
     // Divider
     ctx.strokeStyle = '#E5DDCF'
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(P, 90)
-    ctx.lineTo(w - P, 90)
+    ctx.moveTo(P, 84)
+    ctx.lineTo(w - P, 84)
     ctx.stroke()
 
-    // Main value (first highlighted row)
+    // Main value — centered, large
     const mainRow = rows.find(r => r.highlight) || rows[rows.length - 1]
     const otherRows = rows.filter(r => r !== mainRow)
 
     ctx.fillStyle = '#A8A098'
-    ctx.font = '12px sans-serif'
+    ctx.font = '13px sans-serif'
     ctx.textAlign = 'center'
     ctx.fillText(mainRow.label, w / 2, 130)
 
     ctx.fillStyle = '#2E2A25'
-    ctx.font = 'bold 44px sans-serif'
-    ctx.fillText(mainRow.value.replace('/月', ''), w / 2, 182)
+    ctx.font = 'bold 52px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText(mainRow.value.replace('/月', ''), w / 2, 200)
 
-    // Other rows in columns
+    // Divider below main value
+    const detailY = 240
+    ctx.strokeStyle = '#E5DDCF'
+    ctx.beginPath()
+    ctx.moveTo(P, detailY)
+    ctx.lineTo(w - P, detailY)
+    ctx.stroke()
+
+    // Other rows — evenly distributed
     if (otherRows.length > 0) {
       const cols = w / otherRows.length
-      let ly = 222
-      ctx.strokeStyle = '#E5DDCF'
-      ctx.beginPath()
-      ctx.moveTo(P, ly - 12)
-      ctx.lineTo(w - P, ly - 12)
-      ctx.stroke()
-
       otherRows.forEach((row, i) => {
         const lx = cols * i + cols / 2
         ctx.fillStyle = '#2E2A25'
-        ctx.font = 'bold 18px sans-serif'
-        ctx.fillText(row.value, lx, ly + 6)
+        ctx.font = 'bold 20px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.fillText(row.value, lx, detailY + 34)
         ctx.fillStyle = '#A8A098'
-        ctx.font = '10px sans-serif'
-        ctx.fillText(row.label, lx, ly + 28)
+        ctx.font = '11px sans-serif'
+        ctx.fillText(row.label, lx, detailY + 58)
       })
     }
 
-    // Tip
+    // Tip area
+    const tipY = 350
     if (tip) {
+      ctx.fillStyle = '#FDF9F0'
+      drawRoundRect(ctx, P, tipY - 8, w - P * 2, 52, 12)
+      ctx.fill()
+
       ctx.fillStyle = '#A8A098'
-      ctx.font = '10px sans-serif'
+      ctx.font = '11px sans-serif'
       ctx.textAlign = 'center'
-      ctx.fillText(tip, w / 2, h - 42)
+      ctx.fillText(tip, w / 2, tipY + 24)
     }
 
     // Footer
     ctx.fillStyle = '#C4BCB0'
-    ctx.font = '9px sans-serif'
-    ctx.fillText('来自退休计算器小程序', w / 2, h - 20)
+    ctx.font = '10px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('来自退休计算器小程序', w / 2, h - 28)
   }
 
   const generateImage = useCallback(() => {
@@ -124,7 +133,7 @@ export default function ShareCard({ title, rows, tip }: Props) {
         const canvas = res[0].node
         const ctx = canvas.getContext('2d')
         const w = 375
-        const h = 500
+        const h = 600
         const dpr = Taro.getWindowInfo().pixelRatio
 
         canvas.width = w * dpr
