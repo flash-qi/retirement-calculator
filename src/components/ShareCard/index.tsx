@@ -28,51 +28,88 @@ export default function ShareCard({ title, rows, tip }: Props) {
   const canvasId = 'shareCanvas'
 
   const drawCard = (ctx: any, w: number, h: number) => {
-    const padding = 24
+    const P = 24
 
-    ctx.fillStyle = '#f5f5f5'
+    // Background gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, h)
+    grad.addColorStop(0, '#FBF8F2')
+    grad.addColorStop(0.35, '#FDF9F0')
+    grad.addColorStop(1, '#FBF8F2')
+    ctx.fillStyle = grad
     ctx.fillRect(0, 0, w, h)
 
-    ctx.fillStyle = '#ffffff'
-    drawRoundRect(ctx, padding, 20, w - padding * 2, h - 40, 16)
-    ctx.fill()
+    // Top accent bar
+    const barGrad = ctx.createLinearGradient(0, 0, w, 0)
+    barGrad.addColorStop(0, '#C2A56B')
+    barGrad.addColorStop(1, '#B89B5E')
+    ctx.fillStyle = barGrad
+    ctx.fillRect(0, 0, w, 6)
 
-    ctx.fillStyle = '#1a1a1a'
-    ctx.font = 'bold 20px sans-serif'
-    ctx.fillText('退休计算器', padding + 20, 60)
+    // App name
+    ctx.fillStyle = '#C2A56B'
+    ctx.font = '15px sans-serif'
+    ctx.textAlign = 'left'
+    ctx.fillText('退休计算器', P, 36)
 
-    ctx.strokeStyle = '#f0f0f0'
+    // Title
+    ctx.fillStyle = '#2E2A25'
+    ctx.font = 'bold 22px sans-serif'
+    ctx.fillText(title, P, 72)
+
+    // Divider
+    ctx.strokeStyle = '#E5DDCF'
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(padding + 20, 80)
-    ctx.lineTo(w - padding - 20, 80)
+    ctx.moveTo(P, 90)
+    ctx.lineTo(w - P, 90)
     ctx.stroke()
 
-    ctx.fillStyle = '#666'
-    ctx.font = '14px sans-serif'
-    ctx.fillText(title, padding + 20, 110)
+    // Main value (first highlighted row)
+    const mainRow = rows.find(r => r.highlight) || rows[rows.length - 1]
+    const otherRows = rows.filter(r => r !== mainRow)
 
-    let y = 145
-    rows.forEach((row) => {
-      ctx.fillStyle = row.highlight ? '#2979ff' : '#333'
-      ctx.font = row.highlight ? 'bold 18px sans-serif' : '16px sans-serif'
-      ctx.fillText(row.value, padding + 20, y)
-      ctx.fillStyle = '#999'
-      ctx.font = '12px sans-serif'
-      ctx.fillText(row.label, padding + 20, y + 20)
-      y += 50
-    })
+    ctx.fillStyle = '#A8A098'
+    ctx.font = '12px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText(mainRow.label, w / 2, 130)
 
-    if (tip) {
-      ctx.fillStyle = '#cc8800'
-      ctx.font = '11px sans-serif'
-      ctx.fillText(tip, padding + 20, y + 10)
-      y += 30
+    ctx.fillStyle = '#2E2A25'
+    ctx.font = 'bold 44px sans-serif'
+    ctx.fillText(mainRow.value.replace('/月', ''), w / 2, 182)
+
+    // Other rows in columns
+    if (otherRows.length > 0) {
+      const cols = w / otherRows.length
+      let ly = 222
+      ctx.strokeStyle = '#E5DDCF'
+      ctx.beginPath()
+      ctx.moveTo(P, ly - 12)
+      ctx.lineTo(w - P, ly - 12)
+      ctx.stroke()
+
+      otherRows.forEach((row, i) => {
+        const lx = cols * i + cols / 2
+        ctx.fillStyle = '#2E2A25'
+        ctx.font = 'bold 18px sans-serif'
+        ctx.fillText(row.value, lx, ly + 6)
+        ctx.fillStyle = '#A8A098'
+        ctx.font = '10px sans-serif'
+        ctx.fillText(row.label, lx, ly + 28)
+      })
     }
 
-    ctx.fillStyle = '#ccc'
-    ctx.font = '10px sans-serif'
-    ctx.fillText('来自"退休计算器"小程序', padding + 20, h - 30)
+    // Tip
+    if (tip) {
+      ctx.fillStyle = '#A8A098'
+      ctx.font = '10px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText(tip, w / 2, h - 42)
+    }
+
+    // Footer
+    ctx.fillStyle = '#C4BCB0'
+    ctx.font = '9px sans-serif'
+    ctx.fillText('来自退休计算器小程序', w / 2, h - 20)
   }
 
   const generateImage = useCallback(() => {
