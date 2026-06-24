@@ -29,9 +29,19 @@ export default function Pension() {
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [previewVisible, setPreviewVisible] = useState(false)
 
-  // Instant calc when all required fields are filled
+  // Validation
+  const s = Number(salary), c = Number(conYears), d = Number(deemedYears), a = Number(accountBal), r = Number(retireAge)
+  const errors = {
+    salary: s && (s < 1000 || s > 500000) ? '请输入 1,000 - 500,000 元' : '',
+    conYears: c && (c < 1 || c > 50) ? '请输入 1 - 50 年' : '',
+    deemedYears: d && (d < 0 || d > (c || 0)) ? `请输入 0 - ${c || 0} 年` : '',
+    accountBal: a && (a < 0 || a > 5000000) ? '请输入 0 - 5,000,000 元' : '',
+    retireAge: r && (r < 40 || r > 70) ? '请输入 40 - 70 岁' : ''
+  }
+  const hasError = Object.values(errors).some((e) => e)
+
   useEffect(() => {
-    if (!city || !salary || !conYears || !accountBal) {
+    if (!city || !salary || !conYears || !accountBal || hasError) {
       setResult(null)
       return
     }
@@ -39,13 +49,13 @@ export default function Pension() {
     setResult(calcPension({
       baseAmount: city.base,
       avgIndex,
-      contributionYears: Number(conYears),
-      deemedYears: Number(deemedYears),
-      accountBalance: Number(accountBal),
-      retireAge: Number(retireAge),
+      contributionYears: c,
+      deemedYears: d,
+      accountBalance: a,
+      retireAge: r,
       transitionRatio: city.transitionRatio
     }))
-  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge])
+  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge, hasError])
 
   // Auto-scroll — debounced, only after user stops typing
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>()
@@ -89,16 +99,19 @@ export default function Pension() {
           <Text className='form-label'>月工资（元）</Text>
           <Input className='form-input' type='digit'
             value={salary} onInput={(e) => setSalary(e.detail.value)} />
+          {errors.salary && <Text className='form-error'>{errors.salary}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>缴费年限（年）</Text>
           <Input className='form-input' type='digit'
             value={conYears} onInput={(e) => setConYears(e.detail.value)} />
+          {errors.conYears && <Text className='form-error'>{errors.conYears}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>视同缴费年限 / 1998年前工龄（年）</Text>
           <Input className='form-input' type='digit'
             value={deemedYears} onInput={(e) => setDeemedYears(e.detail.value)} />
+          {errors.deemedYears && <Text className='form-error'>{errors.deemedYears}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>平均缴费指数</Text>
@@ -114,11 +127,13 @@ export default function Pension() {
           <Text className='form-label'>个人账户余额（元）</Text>
           <Input className='form-input' type='digit'
             value={accountBal} onInput={(e) => setAccountBal(e.detail.value)} />
+          {errors.accountBal && <Text className='form-error'>{errors.accountBal}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>退休年龄</Text>
           <Input className='form-input' type='number'
             value={retireAge} onInput={(e) => setRetireAge(e.detail.value)} />
+          {errors.retireAge && <Text className='form-error'>{errors.retireAge}</Text>}
         </View>
       </View>
 

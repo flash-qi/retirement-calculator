@@ -90,6 +90,14 @@
   .picker-arr { color: #C4BCB0; font-size: 28rpx; }
 }
 
+// ===== Validation Error =====
+.form-error {
+  display: block;
+  font-size: 22rpx;
+  color: #FF6B6B;
+  margin-top: 6rpx;
+}
+
 // ===== Primary Button =====
 .btn-primary {
   width: 100%;

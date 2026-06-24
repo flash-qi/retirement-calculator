@@ -27,21 +27,29 @@ export default function Savings() {
   const [result, setResult] = useState<SavingsResult | null>(null)
   const [previewVisible, setPreviewVisible] = useState(false)
 
+  const cAge = Number(currentAge), ra = Number(retireAge), cs = Number(currentSavings), md = Number(monthlyDeposit), le = Number(lifeExpectancy)
+  const errors = {
+    currentAge: cAge && (cAge < 18 || cAge > 80) ? '请输入 18 - 80 岁' : '',
+    retireAge: ra && (ra < cAge + 1 || ra > 80) ? `请输入 ${cAge + 1} - 80 岁` : '',
+    currentSavings: cs && (cs < 0 || cs > 100000000) ? '请输入 0 - 1 亿元' : '',
+    monthlyDeposit: md && (md < 0 || md > 1000000) ? '请输入 0 - 1,000,000 元' : '',
+    lifeExpectancy: le && (le < ra + 1 || le > 120) ? `请输入 ${ra + 1} - 120 岁` : ''
+  }
+  const hasError = Object.values(errors).some((e) => e)
+
   useEffect(() => {
-    const cAge = Number(currentAge)
-    const rAge = Number(retireAge)
-    if (!currentAge || !retireAge || !currentSavings || !monthlyDeposit || rAge <= cAge) {
+    if (!currentAge || !retireAge || !currentSavings || !monthlyDeposit || ra <= cAge || hasError) {
       setResult(null)
       return
     }
     setResult(calcSavings({
-      currentAge: cAge, retireAge: rAge,
-      currentSavings: Number(currentSavings),
-      monthlyDeposit: Number(monthlyDeposit),
+      currentAge: cAge, retireAge: ra,
+      currentSavings: cs,
+      monthlyDeposit: md,
       annualReturn: returnValues[returnIdx],
-      lifeExpectancy: Number(lifeExpectancy)
+      lifeExpectancy: le
     }))
-  }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy])
+  }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy, hasError])
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
@@ -107,21 +115,25 @@ export default function Savings() {
           <Text className='form-label'>当前年龄</Text>
           <Input className='form-input' type='digit'
             value={currentAge} onInput={(e) => setCurrentAge(e.detail.value)} />
+          {errors.currentAge && <Text className='form-error'>{errors.currentAge}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>退休年龄</Text>
           <Input className='form-input' type='digit'
             value={retireAge} onInput={(e) => setRetireAge(e.detail.value)} />
+          {errors.retireAge && <Text className='form-error'>{errors.retireAge}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>当前储蓄（元）</Text>
           <Input className='form-input' type='digit'
             value={currentSavings} onInput={(e) => setCurrentSavings(e.detail.value)} />
+          {errors.currentSavings && <Text className='form-error'>{errors.currentSavings}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>每月存入（元）</Text>
           <Input className='form-input' type='digit'
             value={monthlyDeposit} onInput={(e) => setMonthlyDeposit(e.detail.value)} />
+          {errors.monthlyDeposit && <Text className='form-error'>{errors.monthlyDeposit}</Text>}
         </View>
         <View className='form-item'>
           <Text className='form-label'>预期年化收益率</Text>
@@ -147,6 +159,7 @@ export default function Savings() {
           <Text className='form-label'>预期寿命（岁）</Text>
           <Input className='form-input' type='digit'
             value={lifeExpectancy} onInput={(e) => setLifeExpectancy(e.detail.value)} />
+          {errors.lifeExpectancy && <Text className='form-error'>{errors.lifeExpectancy}</Text>}
         </View>
       </View>
 
