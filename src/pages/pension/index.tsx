@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { View, Text, Input, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import CityPicker, { type SelectedCity } from '../../components/CityPicker'
 import ShareCard from '../../components/ShareCard'
+import ChartCard from '../../components/ChartCard'
 import { calcPension, type PensionResult } from '../../utils/pension'
 import './index.scss'
 
@@ -238,6 +239,20 @@ export default function Pension() {
                 </View>
               )}
             </View>
+          )}
+
+          {result && (
+            <ChartCard id='pensionDonut' draw={(ctx: any, w: number, h: number, dpr: number) => {
+              const segments = [
+                { label: '基础养老金', value: result.basicPension, color: '#C2A56B' },
+                { label: '个人账户', value: result.accountPension, color: '#8B7340' },
+                ...(result.transitionPension > 0
+                  ? [{ label: '过渡性', value: result.transitionPension, color: '#B89B5E' }]
+                  : [])
+              ]
+              const { drawDonutChart } = require('../../utils/chart')
+              drawDonutChart(ctx, segments, { width: w, height: h, dpr })
+            }} />
           )}
 
           <ShareCard title='社保养老金计算结果' rows={shareRows} tip='估算结果供参考' />

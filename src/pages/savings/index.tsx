@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { View, Text, Input, Picker } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import ShareCard from '../../components/ShareCard'
+import ChartCard from '../../components/ChartCard'
 import { calcSavings, type SavingsResult } from '../../utils/savings'
+import { drawGrowthChart } from '../../utils/chart'
 import './index.scss'
 
 const returnOptions = ['保守 2%', '稳健 4%', '平衡 6%', '进取 8%']
@@ -60,6 +62,33 @@ export default function Savings() {
   const realValue = result && inflRate > 0
     ? Math.round(result.monthlyWithdrawal * Math.pow(1 - inflRate, result.workingYears))
     : null
+
+  const growthPoints = useMemo(() => {
+    if (!result) return []
+    const cAge = Number(currentAge)
+    const rAge = Number(retireAge)
+    const lAge = Number(lifeExpectancy)
+    const r = returnValues[returnIdx]
+    const mDep = Number(monthlyDeposit) || 0
+    const cSav = Number(currentSavings) || 0
+    const pts: { age: number; amount: number }[] = []
+    let bal = cSav
+    for (let age = cAge; age <= lAge; age++) {
+      if (age <= rAge) bal = bal * (1 + r) + mDep * 12
+      else { bal -= result.monthlyWithdrawal * 12; if (bal < 0) bal = 0 }
+      if (age === cAge || age % 3 === 0 || age === rAge || age === lAge)
+        pts.push({ age, amount: Math.round(bal) })
+    }
+    return pts
+  }, [result, currentAge, retireAge, lifeExpectancy, returnIdx, monthlyDeposit, currentSavings])
+
+  const drawSavingsChart = useMemo(() =>
+    growthPoints.length > 0
+      ? (ctx: any, w: number, h: number, dpr: number) => {
+          drawGrowthChart(ctx, growthPoints, Number(retireAge), { width: w, height: h, dpr })
+        }
+      : null,
+    [growthPoints, retireAge])
 
   return (
     <View className='page'>
@@ -141,6 +170,10 @@ export default function Savings() {
 
           {interpretation && (
             <View className='tip-card'>{interpretation}</View>
+          )}
+
+          {drawSavingsChart && (
+            <ChartCard id='savingsChart' draw={drawSavingsChart} />
           )}
 
           <ShareCard title='退休储蓄规划结果' rows={shareRows} tip='简化估算供参考' />
