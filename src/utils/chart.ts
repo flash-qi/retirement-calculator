@@ -153,19 +153,28 @@ export function drawDonutChart(
   opts: { width: number; height: number; dpr: number }
 ) {
   const { width: w, height: h, dpr } = opts
+  const legendH = 48
+  const cy = (h - legendH) / 2
   const cx = w / 2
-  const cy = h / 2 - 4
-  const outerR = Math.min(cx, cy) - 16
+  const outerR = Math.min(cx, cy) - 20
   const innerR = outerR * 0.62
 
   ctx.save()
   ctx.scale(dpr, dpr)
 
+  // Background
   ctx.fillStyle = COLORS.white
   ctx.beginPath()
   roundRect(ctx, 0, 0, w, h, 12)
   ctx.fill()
 
+  // Title
+  ctx.fillStyle = COLORS.dark
+  ctx.font = 'bold 13px sans-serif'
+  ctx.textAlign = 'center'
+  ctx.fillText('养老金构成', cx, 18)
+
+  // Donut
   const total = segments.reduce((s, seg) => s + seg.value, 0)
   let startAngle = -Math.PI / 2
 
@@ -180,24 +189,25 @@ export function drawDonutChart(
     startAngle += sliceAngle
   })
 
-  // Center text
+  // Center label
   ctx.fillStyle = COLORS.dark
-  ctx.font = 'bold 16px sans-serif'
-  ctx.textAlign = 'center'
-  ctx.fillText('养老金', cx, cy - 4)
-  ctx.fillText('构成', cx, cy + 14)
+  ctx.font = 'bold 12px sans-serif'
+  ctx.fillText('合计', cx, cy - 4)
+  ctx.font = 'bold 14px sans-serif'
+  const totalStr = total >= 10000 ? (total / 10000).toFixed(1) + '万' : Math.round(total).toString()
+  ctx.fillText('¥' + totalStr, cx, cy + 14)
 
-  // Legend
-  const legendY = h - 32
-  const legendGap = (w - 40) / segments.length
+  // Legend — placed below the donut
+  const legendY = h - 28
+  const itemW = w / segments.length
   ctx.textAlign = 'center'
-  ctx.font = '8px sans-serif'
+  ctx.font = '9px sans-serif'
   segments.forEach((seg, i) => {
-    const lx = 20 + legendGap * i + legendGap / 2
-    ctx.fillStyle = seg.color || COLORS.chart[i % COLORS.chart.length]
-    ctx.fillRect(lx - 16, legendY - 6, 10, 10)
+    const lx = itemW * i + itemW / 2
+    ctx.fillStyle = seg.color
+    ctx.fillRect(lx - 24, legendY - 6, 10, 10)
     ctx.fillStyle = COLORS.text
-    ctx.fillText(seg.label, lx - 4, legendY + 10)
+    ctx.fillText(seg.label, lx - 2, legendY + 8)
   })
 
   ctx.restore()

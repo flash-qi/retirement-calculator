@@ -37,12 +37,14 @@ export default function RetireAge() {
     setResult(calcRetireAge(new Date(birthDate), jobType))
   }, [birthDate, jobType])
 
-  const scrolledRef = useRef(false)
+  const scrollTimer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
-    if (!result) { scrolledRef.current = false; return }
-    if (scrolledRef.current) return
-    scrolledRef.current = true
-    setTimeout(() => Taro.pageScrollTo({ scrollTop: 9999, duration: 300 }), 300)
+    if (!result) return
+    clearTimeout(scrollTimer.current)
+    scrollTimer.current = setTimeout(() => {
+      Taro.pageScrollTo({ scrollTop: 9999, duration: 300 })
+    }, 800)
+    return () => clearTimeout(scrollTimer.current)
   }, [result])
 
   return (
