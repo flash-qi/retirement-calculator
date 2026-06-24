@@ -146,18 +146,15 @@ export function drawGrowthChart(
   ctx.restore()
 }
 
-/** Draw a donut chart for pension composition */
+/** Draw a donut chart for pension composition — legend on the right */
 export function drawDonutChart(
   ctx: any,
   segments: { label: string; value: number; color: string }[],
   opts: { width: number; height: number; dpr: number }
 ) {
   const { width: w, height: h, dpr } = opts
-  const legendH = 48
-  const cy = (h - legendH) / 2
-  const cx = w / 2
-  const outerR = Math.min(cx, cy) - 20
-  const innerR = outerR * 0.62
+  const donutArea = w * 0.58  // donut takes left 58%
+  const legendX = donutArea   // legend starts here
 
   ctx.save()
   ctx.scale(dpr, dpr)
@@ -171,10 +168,15 @@ export function drawDonutChart(
   // Title
   ctx.fillStyle = COLORS.dark
   ctx.font = 'bold 13px sans-serif'
-  ctx.textAlign = 'center'
-  ctx.fillText('养老金构成', cx, 18)
+  ctx.textAlign = 'left'
+  ctx.fillText('养老金构成', 16, 20)
 
-  // Donut
+  // Donut — centered in left area
+  const cx = donutArea / 2
+  const cy = h / 2 + 2
+  const outerR = Math.min(cx, cy) - 24
+  const innerR = outerR * 0.6
+
   const total = segments.reduce((s, seg) => s + seg.value, 0)
   let startAngle = -Math.PI / 2
 
@@ -189,25 +191,38 @@ export function drawDonutChart(
     startAngle += sliceAngle
   })
 
-  // Center label
+  // Center label in donut
   ctx.fillStyle = COLORS.dark
-  ctx.font = 'bold 12px sans-serif'
+  ctx.font = 'bold 11px sans-serif'
+  ctx.textAlign = 'center'
   ctx.fillText('合计', cx, cy - 4)
-  ctx.font = 'bold 14px sans-serif'
+  ctx.font = 'bold 13px sans-serif'
   const totalStr = total >= 10000 ? (total / 10000).toFixed(1) + '万' : Math.round(total).toString()
   ctx.fillText('¥' + totalStr, cx, cy + 14)
 
-  // Legend — placed below the donut
-  const legendY = h - 28
-  const itemW = w / segments.length
-  ctx.textAlign = 'center'
-  ctx.font = '9px sans-serif'
+  // Legend — right side, vertically centered
+  const legendItemH = 42
+  const legendStartY = cy - ((segments.length * legendItemH) / 2) + 10
+
+  ctx.textAlign = 'left'
   segments.forEach((seg, i) => {
-    const lx = itemW * i + itemW / 2
+    const ly = legendStartY + i * legendItemH
+
+    // Color dot
     ctx.fillStyle = seg.color
-    ctx.fillRect(lx - 24, legendY - 6, 10, 10)
+    ctx.beginPath()
+    ctx.arc(legendX + 20, ly, 6, 0, Math.PI * 2)
+    ctx.fill()
+
+    // Value (bold)
+    ctx.fillStyle = COLORS.dark
+    ctx.font = 'bold 12px sans-serif'
+    ctx.fillText('¥' + Math.round(seg.value).toLocaleString(), legendX + 34, ly - 5)
+
+    // Label
     ctx.fillStyle = COLORS.text
-    ctx.fillText(seg.label, lx - 2, legendY + 8)
+    ctx.font = '9px sans-serif'
+    ctx.fillText(seg.label, legendX + 34, ly + 12)
   })
 
   ctx.restore()
