@@ -7,7 +7,6 @@ import { hasErrors } from '../../utils/validation'
 import { RETIREMENT_SUMS } from '../../data/cpf'
 import './index.scss'
 
-const CNY_PER_SGD = 5.3 // approximate exchange rate
 const BEIJING_BASE = 12049
 
 export default function Compare() {
@@ -16,6 +15,7 @@ export default function Compare() {
   const [age, setAge] = useState('')
   const [salaryCNY, setSalary] = useState('')
   const [workYears, setWorkYears] = useState('')
+  const [fxRate, setFxRate] = useState('5.3')
   const [showResult, setShowResult] = useState(false)
 
   const a = Number(age), s = Number(salaryCNY), w = Number(workYears)
@@ -38,7 +38,7 @@ export default function Compare() {
 
   const sgResult = age && salaryCNY && !error ? calcCPF({
     age: a,
-    salary: Math.round(s / CNY_PER_SGD),
+    salary: Math.round(s / Number(fxRate)),
     oaBalance: 0,
     saBalance: 0,
     maBalance: 0,
@@ -80,9 +80,14 @@ export default function Compare() {
             onInput={(e) => setWorkYears(e.detail.value)} />
           {errors.workYears && <Text className='form-error'>{errors.workYears}</Text>}
         </View>
+        <View className='form-item'>
+          <Text className='form-label'>汇率 (1 SGD = ? CNY)</Text>
+          <Input className='form-input' type='digit' value={fxRate}
+            onInput={(e) => setFxRate(e.detail.value)} />
+        </View>
       </View>
 
-      <Text className='form-note'>北京社保（计发基数 ¥12,049）vs 新加坡CPF（汇率 1 SGD ≈ 5.3 CNY），月薪自动换算</Text>
+      <Text className='form-note'>北京社保（计发基数 ¥12,049）vs 新加坡CPF，当前汇率 1 SGD ≈ {fxRate} CNY，可自行修改</Text>
 
       {showResult && cnResult && sgResult && (
         <View className='dual-compare'>
@@ -107,7 +112,7 @@ export default function Compare() {
             <Text className='dual-amount'>
               S${sgResult.monthlyPayout.toLocaleString()}
             </Text>
-            <Text className='dual-unit'>/月 ≈ ¥{Math.round(sgResult.monthlyPayout * CNY_PER_SGD).toLocaleString()}</Text>
+            <Text className='dual-unit'>/月 ≈ ¥{Math.round(sgResult.monthlyPayout * Number(fxRate)).toLocaleString()}</Text>
             <View className='dual-detail'>
               <Text className='dual-item'>RA S${sgResult.raBalance.toLocaleString()}</Text>
               <Text className='dual-item'>
@@ -115,9 +120,9 @@ export default function Compare() {
               </Text>
             </View>
             <View className='dual-bar'>
-              <View className='dual-fill' style={{ width: `${Math.min(sgResult.monthlyPayout * CNY_PER_SGD / s * 100, 100)}%` }} />
+              <View className='dual-fill' style={{ width: `${Math.min(sgResult.monthlyPayout * Number(fxRate) / s * 100, 100)}%` }} />
             </View>
-            <Text className='dual-rate'>约 {Math.round(sgResult.monthlyPayout * CNY_PER_SGD / s * 100)}% 替代率</Text>
+            <Text className='dual-rate'>约 {Math.round(sgResult.monthlyPayout * Number(fxRate) / s * 100)}% 替代率</Text>
           </View>
 
           <Text className='dual-note'>以上为简化估算，实际金额受政策、汇率、缴费基数等多因素影响</Text>
