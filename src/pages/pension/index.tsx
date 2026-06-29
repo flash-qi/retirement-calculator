@@ -6,6 +6,7 @@ import ShareCard from '../../components/ShareCard'
 import ChartCard from '../../components/ChartCard'
 import { calcPension, type PensionResult } from '../../utils/pension'
 import { hasErrors } from '../../utils/validation'
+import { drawDonutChart } from '../../utils/chart'
 import './index.scss'
 
 const indexOptions = ['0.6 (60%)', '0.8 (80%)', '1.0 (100%)', '1.5 (150%)', '2.0 (200%)', '3.0 (300%)']
@@ -331,7 +332,6 @@ export default function Pension() {
                   ? [{ label: '过渡性', value: result.transitionPension, color: '#B89B5E' }]
                   : [])
               ]
-              const { drawDonutChart } = require('../../utils/chart')
               drawDonutChart(ctx, segments, { width: w, height: h, dpr })
             }} />
           )}
