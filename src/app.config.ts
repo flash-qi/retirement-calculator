@@ -3,7 +3,8 @@ export default {
     'pages/index/index',
     'pages/retire-age/index',
     'pages/pension/index',
-    'pages/savings/index'
+    'pages/savings/index',
+    'pages/cpf/index'
   ],
   window: {
     backgroundTextStyle: 'light',
