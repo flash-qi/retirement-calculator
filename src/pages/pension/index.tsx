@@ -5,6 +5,7 @@ import CityPicker, { type SelectedCity } from '../../components/CityPicker'
 import ShareCard from '../../components/ShareCard'
 import ChartCard from '../../components/ChartCard'
 import { calcPension, type PensionResult } from '../../utils/pension'
+import { hasErrors } from '../../utils/validation'
 import './index.scss'
 
 const indexOptions = ['0.6 (60%)', '0.8 (80%)', '1.0 (100%)', '1.5 (150%)', '2.0 (200%)', '3.0 (300%)']
@@ -38,24 +39,25 @@ export default function Pension() {
     accountBal: a && (a < 0 || a > 5000000) ? '请输入 0 - 5,000,000 元' : '',
     retireAge: r && (r < 40 || r > 70) ? '请输入 40 - 70 岁' : ''
   }
-  const hasError = Object.values(errors).some((e) => e)
+  const error = hasErrors(errors)
 
   useEffect(() => {
-    if (!city || !salary || !conYears || !accountBal || hasError) {
+    if (!city || !salary || !conYears || !accountBal || error) {
       setResult(null)
       return
     }
     const avgIndex = indexValues[indexIdx]
+    const nc = Number(conYears), nd = Number(deemedYears), na = Number(accountBal), nr = Number(retireAge)
     setResult(calcPension({
       baseAmount: city.base,
       avgIndex,
-      contributionYears: c,
-      deemedYears: d,
-      accountBalance: a,
-      retireAge: r,
+      contributionYears: nc,
+      deemedYears: nd,
+      accountBalance: na,
+      retireAge: nr,
       transitionRatio: city.transitionRatio
     }))
-  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge, hasError])
+  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge, error])
 
   // Auto-scroll — debounced, only after user stops typing
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>()

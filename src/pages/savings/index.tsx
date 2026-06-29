@@ -5,6 +5,7 @@ import ShareCard from '../../components/ShareCard'
 import ChartCard from '../../components/ChartCard'
 import { calcSavings, type SavingsResult } from '../../utils/savings'
 import { drawGrowthChart } from '../../utils/chart'
+import { hasErrors } from '../../utils/validation'
 import './index.scss'
 
 const returnOptions = ['保守 2%', '稳健 4%', '平衡 6%', '进取 8%']
@@ -35,10 +36,10 @@ export default function Savings() {
     monthlyDeposit: md && (md < 0 || md > 1000000) ? '请输入 0 - 1,000,000 元' : '',
     lifeExpectancy: le && (le < ra + 1 || le > 120) ? `请输入 ${ra + 1} - 120 岁` : ''
   }
-  const hasError = Object.values(errors).some((e) => e)
+  const error = hasErrors(errors)
 
   useEffect(() => {
-    if (!currentAge || !retireAge || !currentSavings || !monthlyDeposit || ra <= cAge || hasError) {
+    if (!currentAge || !retireAge || !currentSavings || !monthlyDeposit || ra <= cAge || error) {
       setResult(null)
       return
     }
@@ -49,7 +50,7 @@ export default function Savings() {
       annualReturn: returnValues[returnIdx],
       lifeExpectancy: le
     }))
-  }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy, hasError])
+  }, [currentAge, retireAge, currentSavings, monthlyDeposit, returnIdx, lifeExpectancy, error])
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>()
   useEffect(() => {
