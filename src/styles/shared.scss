@@ -98,6 +98,48 @@
   margin-top: 6rpx;
 }
 
+// Enterprise Annuity Toggle
+.annuity-toggle {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 0;
+  margin-top: 8rpx;
+}
+
+.toggle-switch {
+  width: 64rpx;
+  height: 36rpx;
+  border-radius: 18rpx;
+  background: #E5DDCF;
+  position: relative;
+  transition: background 0.2s;
+
+  &.on { background: #C2A56B; }
+}
+
+.toggle-knob {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 14rpx;
+  background: #FFF;
+  position: absolute;
+  top: 4rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+
+  &.off { left: 4rpx; }
+}
+
+.toggle-switch.on .toggle-knob {
+  left: 32rpx;
+}
+
+.toggle-label {
+  font-size: 26rpx;
+  color: #2E2A25;
+  font-weight: 500;
+}
+
 // ===== Primary Button =====
 .btn-primary {
   width: 100%;

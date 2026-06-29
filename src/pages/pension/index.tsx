@@ -10,6 +10,10 @@ import './index.scss'
 
 const indexOptions = ['0.6 (60%)', '0.8 (80%)', '1.0 (100%)', '1.5 (150%)', '2.0 (200%)', '3.0 (300%)']
 const indexValues = [0.6, 0.8, 1.0, 1.5, 2.0, 3.0]
+const annuityCompanyOptions = ['4%', '5%', '6%', '7%', '8%（上限）']
+const annuityCompanyValues = [0.04, 0.05, 0.06, 0.07, 0.08]
+const annuityPersonalOptions = ['1%', '2%', '3%', '4%（上限）']
+const annuityPersonalValues = [0.01, 0.02, 0.03, 0.04]
 
 export default function Pension() {
   Taro.useShareAppMessage(() => ({
@@ -29,6 +33,9 @@ export default function Pension() {
   interface Scenario { label: string; pension: number; replacementRate: number; basic: number; account: number }
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [previewVisible, setPreviewVisible] = useState(false)
+  const [showAnnuity, setShowAnnuity] = useState(false)
+  const [annuityCompanyIdx, setAnnuityCompanyIdx] = useState(4) // default 8%
+  const [annuityPersonalIdx, setAnnuityPersonalIdx] = useState(3) // default 4%
 
   // Validation
   const s = Number(salary), c = Number(conYears), d = Number(deemedYears), a = Number(accountBal), r = Number(retireAge)
@@ -48,7 +55,7 @@ export default function Pension() {
     }
     const avgIndex = indexValues[indexIdx]
     const nc = Number(conYears), nd = Number(deemedYears), na = Number(accountBal), nr = Number(retireAge)
-    setResult(calcPension({
+    const baseResult = calcPension({
       baseAmount: city.base,
       avgIndex,
       contributionYears: nc,
@@ -56,8 +63,20 @@ export default function Pension() {
       accountBalance: na,
       retireAge: nr,
       transitionRatio: city.transitionRatio
-    }))
-  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge, error])
+    })
+    // Enterprise annuity
+    let annuityMonthly = 0
+    if (showAnnuity) {
+      const sal = Number(salary)
+      const annualDeposit = sal * (annuityCompanyValues[annuityCompanyIdx] + annuityPersonalValues[annuityPersonalIdx]) * 12
+      const interest = 0.03 // default 3% assumed return
+      const workYears = Math.min(nc, nr - 22) // working years, assume starts at 22
+      const fv = workYears > 0 ? annualDeposit * ((Math.pow(1 + interest, workYears) - 1) / interest) : annualDeposit
+      const months = nr >= 60 ? 139 : nr >= 55 ? 170 : 195 // payout months
+      annuityMonthly = Math.round(fv / months)
+    }
+    setResult({ ...baseResult, totalPension: baseResult.totalPension + annuityMonthly, annuityMonthly } as any)
+  }, [city, salary, conYears, deemedYears, indexIdx, accountBal, retireAge, error, showAnnuity, annuityCompanyIdx, annuityPersonalIdx])
 
   // Auto-scroll — debounced, only after user stops typing
   const scrollTimer = useRef<ReturnType<typeof setTimeout>>()
@@ -139,6 +158,40 @@ export default function Pension() {
         </View>
       </View>
 
+      {/* Enterprise Annuity Toggle */}
+      <View className='annuity-toggle' onClick={() => setShowAnnuity(!showAnnuity)}>
+        <View className={`toggle-switch ${showAnnuity ? 'on' : ''}`}>
+          {showAnnuity && <View className='toggle-knob' />}
+          {!showAnnuity && <View className='toggle-knob off' />}
+        </View>
+        <Text className='toggle-label'>我有企业年金/职业年金</Text>
+      </View>
+
+      {showAnnuity && (
+        <View className='form-card' style='margin-top: 16rpx;'>
+          <View className='form-item'>
+            <Text className='form-label'>单位缴费比例</Text>
+            <Picker mode='selector' range={annuityCompanyOptions}
+              value={annuityCompanyIdx} onChange={(e) => setAnnuityCompanyIdx(Number(e.detail.value))}>
+              <View className='form-picker'>
+                <Text>{annuityCompanyOptions[annuityCompanyIdx]}</Text>
+                <Text className='picker-arr'>›</Text>
+              </View>
+            </Picker>
+          </View>
+          <View className='form-item'>
+            <Text className='form-label'>个人缴费比例</Text>
+            <Picker mode='selector' range={annuityPersonalOptions}
+              value={annuityPersonalIdx} onChange={(e) => setAnnuityPersonalIdx(Number(e.detail.value))}>
+              <View className='form-picker'>
+                <Text>{annuityPersonalOptions[annuityPersonalIdx]}</Text>
+                <Text className='picker-arr'>›</Text>
+              </View>
+            </Picker>
+          </View>
+        </View>
+      )}
+
       <Text className='form-note'>当前数据为2025年各省人社厅公布数据，2026年计发基数将在下半年陆续更新</Text>
 
       {result && (
@@ -160,6 +213,12 @@ export default function Pension() {
                 <View className='breakdown-item'>
                   <Text className='breakdown-val'>¥{result.transitionPension.toLocaleString()}</Text>
                   <Text className='breakdown-lbl'>过渡性</Text>
+                </View>
+              )}
+              {(result as any).annuityMonthly > 0 && (
+                <View className='breakdown-item'>
+                  <Text className='breakdown-val'>¥{(result as any).annuityMonthly.toLocaleString()}</Text>
+                  <Text className='breakdown-lbl'>企业年金</Text>
                 </View>
               )}
             </View>
