@@ -98,11 +98,11 @@ export default function CPF() {
           <View className='result-breakdown'>
             <View className='breakdown-item'>
               <Text className='breakdown-val'>S${result.raBalance.toLocaleString()}</Text>
-              <Text className='breakdown-lbl'>RA 退休账户</Text>
+              <Text className='breakdown-lbl'>RA（SA在55岁转入）</Text>
             </View>
             <View className='breakdown-item'>
               <Text className='breakdown-val'>S${result.oaFinal.toLocaleString()}</Text>
-              <Text className='breakdown-lbl'>OA 普通账户</Text>
+              <Text className='breakdown-lbl'>OA（可灵活提取）</Text>
             </View>
             <View className='breakdown-item'>
               <Text className='breakdown-val' style={{ color: result.meetsFRS ? '#10B981' : '#F59E0B' }}>

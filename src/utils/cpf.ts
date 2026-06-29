@@ -11,9 +11,8 @@ export interface CPFInput {
 
 export interface CPFResult {
   oaFinal: number         // OA at retirement
-  saFinal: number         // SA at retirement (becomes RA at 55)
   maFinal: number         // MA at retirement
-  raBalance: number       // RA at retirement
+  raBalance: number       // RA at retirement (from SA at 55, plus post-55 RA contributions)
   monthlyPayout: number   // CPF LIFE monthly
   totalRetirement: number // RA + OA
   meetsFRS: boolean       // meets Full Retirement Sum?
@@ -28,39 +27,43 @@ export function calcCPF(input: CPFInput): CPFResult {
   const { age, salary, oaBalance, saBalance, maBalance, retireAt } = input
   const cappedSalary = Math.min(salary, CPF_SALARY_CEILING)
 
-  let oa = oaBalance, sa = saBalance, ma = maBalance
+  // Three accounts pre-55, RA created at 55
+  let oa = oaBalance
+  let sa = saBalance
+  let ma = maBalance
+  let ra = 0 // Retirement Account, created at age 55
 
   for (let a = age; a < retireAt; a++) {
     const band = getBand(a)
-    const monthlyContrib = cappedSalary * band.totalRate
-    const monthlyOA = cappedSalary * band.oa
-    const monthlySA = cappedSalary * band.sa
-    const monthlyMA = cappedSalary * band.ma
 
-    // Compound
-    oa = oa * (1 + CPF_INTEREST.oa) + monthlyOA * 12
-    sa = sa * (1 + CPF_INTEREST.sa) + monthlySA * 12
-    ma = ma * (1 + CPF_INTEREST.ma) + monthlyMA * 12
+    if (a < 55) {
+      // Pre-55: OA / SA / MA
+      oa = oa * (1 + CPF_INTEREST.oa) + cappedSalary * band.oa * 12
+      sa = sa * (1 + CPF_INTEREST.sa) + cappedSalary * band.sa * 12
+      ma = ma * (1 + CPF_INTEREST.ma) + cappedSalary * band.ma * 12
+    } else {
+      // Post-55: OA / RA (SA closed, contributions go to RA) / MA
+      oa = oa * (1 + CPF_INTEREST.oa) + cappedSalary * band.oa * 12
+      ra = ra * (1 + CPF_INTEREST.ra) + cappedSalary * band.sa * 12
+      ma = ma * (1 + CPF_INTEREST.ma) + cappedSalary * band.ma * 12
+    }
 
-    // At 55, SA moves to RA
+    // At exactly age 55: transfer SA balance → RA
     if (a === 55) {
-      // SA savings above FRS? Can withdraw above FRS/BRS
+      ra = sa // SA moves to RA at 55
       sa = 0
     }
   }
 
-  // At retirement: SA=0 (moved to RA at 55), balance forms RA
-  const raBalance = sa // SA has been accumulating as "RA" post-55
-  const monthlyPayout = estimateCPFLIFE(raBalance)
+  const monthlyPayout = estimateCPFLIFE(ra)
 
   return {
     oaFinal: Math.round(oa),
-    saFinal: Math.round(sa), // should be 0 at retirement
     maFinal: Math.round(ma),
-    raBalance: Math.round(raBalance),
+    raBalance: Math.round(ra),
     monthlyPayout,
-    totalRetirement: Math.round(oa + raBalance),
-    meetsFRS: raBalance >= RETIREMENT_SUMS.frs,
-    meetsBRS: raBalance >= RETIREMENT_SUMS.brs
+    totalRetirement: Math.round(oa + ra),
+    meetsFRS: ra >= RETIREMENT_SUMS.frs,
+    meetsBRS: ra >= RETIREMENT_SUMS.brs
   }
 }
