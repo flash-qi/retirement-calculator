@@ -4,7 +4,8 @@ export default {
     'pages/retire-age/index',
     'pages/pension/index',
     'pages/savings/index',
-    'pages/cpf/index'
+    'pages/cpf/index',
+    'pages/compare/index'
   ],
   window: {
     backgroundTextStyle: 'light',

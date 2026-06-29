@@ -7,7 +7,8 @@ const menus = [
   { cssClass: 'c1', title: '延迟退休年龄查询', desc: '输入出生日期，查看实际退休年龄', url: '/pages/retire-age/index' },
   { cssClass: 'c2', title: '社保养老金计算', desc: '估算退休后每月能领多少养老金', url: '/pages/pension/index' },
   { cssClass: 'c3', title: '退休储蓄规划', desc: '计算退休后每月可支配金额', url: '/pages/savings/index' },
-  { cssClass: 'c4', title: 'CPF 退休计算 (SG)', desc: '预估新加坡CPF退休账户和月收入', url: '/pages/cpf/index' }
+  { cssClass: 'c4', title: 'CPF 退休计算 (SG)', desc: '预估新加坡CPF退休账户和月收入', url: '/pages/cpf/index' },
+  { cssClass: 'c5', title: '中新退休对比', desc: '同一参数，对比中国vs新加坡退休收入', url: '/pages/compare/index' }
 ]
 
 const FEEDBACK_LINK = 'https://docs.qq.com/form/page/DUUZzSWpjVHhaQVdJ'
@@ -19,6 +20,7 @@ const ICONS = {
   calculator: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8B7340" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>'),
   chart: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B89B5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'),
   cpf: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C2A56B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'),
+  compare: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="17 7 12 2 7 7"/><polyline points="7 17 12 22 17 17"/></svg>'),
   shield: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C2A56B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'),
   check: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2A56B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>')
 }
@@ -87,7 +89,7 @@ export default function Index() {
             <View className={`menu-icon-wrap ${m.cssClass}`}>
               <image
                 className='icon-svg'
-                src={[ICONS.calendar, ICONS.calculator, ICONS.chart, ICONS.cpf][i]}
+                src={[ICONS.calendar, ICONS.calculator, ICONS.chart, ICONS.cpf, ICONS.compare][i]}
                 mode='aspectFit'
               />
             </View>
