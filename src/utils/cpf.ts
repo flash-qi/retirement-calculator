@@ -1,4 +1,4 @@
-import { CPF_RATES, CPF_INTEREST, RETIREMENT_SUMS, estimateCPFLIFE, CPF_SALARY_CEILING, type CPFAgeBand } from '../data/cpf'
+import { CPF_RATES, CPF_RATES_2027_OVERRIDES, CPF_INTEREST, RETIREMENT_SUMS, RETIREMENT_SUMS_2027, estimateCPFLIFE, CPF_SALARY_CEILING, type CPFAgeBand } from '../data/cpf'
 
 export interface CPFInput {
   age: number             // current age
@@ -19,8 +19,17 @@ export interface CPFResult {
   meetsBRS: boolean
 }
 
-function getBand(age: number): CPFAgeBand {
-  return CPF_RATES.find(b => age >= b.minAge && age <= b.maxAge) || CPF_RATES[CPF_RATES.length - 1]
+/** 当前年份（2026）作为模拟基准年 */
+const BASE_YEAR = 2026
+
+function getBand(age: number, year: number): CPFAgeBand {
+  const band = CPF_RATES.find(b => age >= b.minAge && age <= b.maxAge) || CPF_RATES[CPF_RATES.length - 1]
+  // 2027-01-01 起 55+ 档费率上调（增量全入 RA）
+  if (year >= 2027) {
+    const override = CPF_RATES_2027_OVERRIDES.find(b => age >= b.minAge && age <= b.maxAge)
+    if (override) return override
+  }
+  return band
 }
 
 export function calcCPF(input: CPFInput): CPFResult {
@@ -33,8 +42,11 @@ export function calcCPF(input: CPFInput): CPFResult {
   let ma = maBalance
   let ra = 0 // Retirement Account, created at age 55
 
+  const retireYear = BASE_YEAR + (retireAt - age)
+
   for (let a = age; a < retireAt; a++) {
-    const band = getBand(a)
+    const year = BASE_YEAR + (a - age)
+    const band = getBand(a, year)
 
     if (a < 55) {
       // Pre-55: OA / SA / MA
@@ -57,13 +69,16 @@ export function calcCPF(input: CPFInput): CPFResult {
 
   const monthlyPayout = estimateCPFLIFE(ra)
 
+  // 按退休年份选择退休金全额（2027 起用 2027 队列）
+  const sums = retireYear >= 2027 ? RETIREMENT_SUMS_2027 : RETIREMENT_SUMS
+
   return {
     oaFinal: Math.round(oa),
     maFinal: Math.round(ma),
     raBalance: Math.round(ra),
     monthlyPayout,
     totalRetirement: Math.round(oa + ra),
-    meetsFRS: ra >= RETIREMENT_SUMS.frs,
-    meetsBRS: ra >= RETIREMENT_SUMS.brs
+    meetsFRS: ra >= sums.frs,
+    meetsBRS: ra >= sums.brs
   }
 }
