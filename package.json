@@ -1,6 +1,6 @@
 {
   "name": "retirement-calculator",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "退休计算器微信小程序",
   "scripts": {
     "dev:weapp": "taro build --type weapp --watch",
