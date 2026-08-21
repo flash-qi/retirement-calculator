@@ -193,7 +193,7 @@ export default function Pension() {
         </View>
       )}
 
-      <Text className='form-note'>当前数据为2025年各省人社厅公布数据，2026年计发基数将在下半年陆续更新</Text>
+      <Text className='form-note'>计发基数已更新至 2026 年（部分省份为报道值待核实，其余沿用 2025 年数据）</Text>
 
       {result && (
         <>
