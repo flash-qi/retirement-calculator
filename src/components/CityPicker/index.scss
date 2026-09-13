@@ -44,7 +44,8 @@
   color: #2E2A25;
 }
 
-.city-list { max-height: 600rpx; padding: 0; }
+// 注意：scroll-view 在 webview 渲染模式下不支持 padding，勿在此加内边距
+.city-list { max-height: 600rpx; }
 
 .city-item {
   display: flex;
@@ -89,17 +90,18 @@
 // 数据年度状态：已公布 vs 预发中
 .city-tag {
   display: inline-block;
-  font-size: 20rpx;
+  font-size: 22rpx;
+  font-weight: 600;
   line-height: 1.5;
-  padding: 2rpx 10rpx;
-  border-radius: 6rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
   margin-left: 12rpx;
   vertical-align: middle;
   white-space: nowrap;
   flex-shrink: 0;
 
-  &.published { color: #0F7A57; background: #E7F6EF; }
-  &.pending   { color: #B45309; background: #FFFBEB; }
+  &.published { color: #0B6B4A; background: #DCF3E8; }
+  &.pending   { color: #9A4A08; background: #FEF3C7; }
 }
 
 .city-note {
