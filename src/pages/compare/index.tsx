@@ -4,10 +4,13 @@ import Taro from '@tarojs/taro'
 import { calcPension } from '../../utils/pension'
 import { calcCPF } from '../../utils/cpf'
 import { hasErrors } from '../../utils/validation'
-import { RETIREMENT_SUMS } from '../../data/cpf'
+import { provinces, dataStatusLabel, type CityData } from '../../data/cities'
 import './index.scss'
 
-const BEIJING_BASE = 12049
+// 对比基准取北京全市——与 cities.ts 同源，避免两处硬编码打架。
+// 北京为静态数据中的固定项，找不到即说明数据文件被改坏，开发期会立刻暴露。
+const BEIJING_CITY = provinces.find((p) => p.name === '北京')!.cities[0] as CityData
+const BEIJING_BASE = BEIJING_CITY.base
 
 export default function Compare() {
   Taro.useShareAppMessage(() => ({ title: '退休计算器', path: '/pages/index/index' }))
@@ -87,7 +90,7 @@ export default function Compare() {
         </View>
       </View>
 
-      <Text className='form-note'>北京社保（计发基数 ¥12,049）vs 新加坡CPF，当前汇率 1 SGD ≈ {fxRate} CNY，可自行修改</Text>
+      <Text className='form-note'>北京社保（计发基数 ¥{BEIJING_BASE.toLocaleString()}，{dataStatusLabel(BEIJING_CITY)}）vs 新加坡CPF，当前汇率 1 SGD ≈ {fxRate} CNY，可自行修改</Text>
 
       {showResult && cnResult && sgResult && (
         <View className='dual-compare'>
