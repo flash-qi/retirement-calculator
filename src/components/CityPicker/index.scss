@@ -9,7 +9,7 @@
   font-weight: 400;
 
   .placeholder { color: #C4BCB0; }
-  .arrow { font-size: 24rpx; color: #C4BCB0; }
+  .arrow { font-size: 24rpx; color: #C4BCB0; flex-shrink: 0; }
 }
 
 .picker-dropdown {
@@ -49,22 +49,63 @@
 .city-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 16rpx;
   padding: 28rpx 32rpx;
 
   &:not(:last-child) { border-bottom: 1rpx solid rgba(255,142,114,0.06); }
   &.active .city-name { color: #C2A56B; font-weight: 600; }
 }
 
+.city-item-main { flex: 1; min-width: 0; }
+
+.city-item-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 6rpx;
+}
+
+.city-item-tail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
 .city-name { font-size: 30rpx; color: #2E2A25; }
-.city-base { font-size: 26rpx; color: #A8A098; }
-.city-note {
+
+.city-base {
+  font-size: 26rpx;
+  color: #A8A098;
+  flex-shrink: 0;
+}
+
+.city-count {
+  font-size: 26rpx;
+  color: #A8A098;
+}
+
+// 数据年度状态：已公布 vs 预发中
+.city-tag {
   display: inline-block;
-  font-size: 22rpx;
-  color: #F59E0B;
-  background: #FFFBEB;
+  font-size: 20rpx;
+  line-height: 1.5;
   padding: 2rpx 10rpx;
   border-radius: 6rpx;
   margin-left: 12rpx;
   vertical-align: middle;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &.published { color: #0F7A57; background: #E7F6EF; }
+  &.pending   { color: #B45309; background: #FFFBEB; }
+}
+
+.city-note {
+  display: block;
+  font-size: 20rpx;
+  color: #A8A098;
+  line-height: 1.5;
+  margin-top: 8rpx;
 }

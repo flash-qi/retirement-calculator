@@ -193,7 +193,13 @@ export default function Pension() {
         </View>
       )}
 
-      <Text className='form-note'>计发基数已更新至 2026 年（部分省份为报道值待核实，其余沿用 2025 年数据）</Text>
+      <Text className='form-note'>计发基数随各省人社厅公布更新：2026 年已公布 5 地，其余省份按 2025 年值预发，新基数公布后重算补差</Text>
+
+      {city?.provisional && (
+        <View className='tip-card'>
+          {city.provinceName} 2026 年计发基数尚未公布，当前按 {city.year} 年值（{city.base.toLocaleString()} 元/月）预发计算；实际退休时社保局会按新基数重算并补发差额。
+        </View>
+      )}
 
       {result && (
         <>
