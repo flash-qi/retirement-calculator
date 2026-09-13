@@ -34,6 +34,11 @@ export const CPF_RATES_2027_OVERRIDES: CPFAgeBand[] = [
 
 // Interest rates (2026, floor rates; SMRA 4% floor extended to 2026-12-31)
 // Note: age 55+ get extra 2% on first $30k + extra 1% on next $30k (not modelled in calc)
+//
+// ⚠️ 到期风险：SMRA 的 4% 利率下限将于 2026-12-31 到期。截至 2026-09-13，
+// 尚无任何公告将其延长至 2027 年（Q4 2026 利率公告按惯例应在 9 月中下旬发布，尚未发布）。
+// 本计算器对 2027 年及以后仍按 4% 复利 —— 这是乐观假设，实际可能回落。
+// 若日后公告不再延长，需下调 sa/ma/ra 并以调整后利率重算。
 export const CPF_INTEREST = {
   oa: 0.025,         // up to 3.5% with extra
   sa: 0.04,          // up to 5% with extra
@@ -48,12 +53,44 @@ export const RETIREMENT_SUMS = { brs: 110200, frs: 220400, ers: 440800 }
 // Retirement Sums — 2027 cohort (official 2023-2027 +3.5%/yr trajectory)
 export const RETIREMENT_SUMS_2027 = { brs: 114100, frs: 228200, ers: 456400 }
 
-// CPF LIFE monthly payout estimates for different RA balances at 65
-// Based on CPF LIFE Standard Plan (2026 estimates)
+// CPF LIFE monthly payout — official anchor points (Standard Plan, payouts from 65)
+//
+//   RA balance at 65 | monthly payout | corresponds to
+//   $170,200         | $950           | BRS $110,200 deposited at 55
+//   $330,100         | $1,780         | FRS $220,400 deposited at 55
+//   $650,100         | $3,440         | ERS $440,800 deposited at 55
+//
+// Source: https://www.cpf.gov.sg/member/infohub/educational-resources/how-the-cpf-retirement-sum-affects-your-payouts
+//
+// 注：CPF 官方不发布分计划（Standard/Basic/Escalating）的定格表，只提供在线估算器。
+// 故此处以官方示例点做分段线性插值，属近似值——实际给付随领取年龄、利率与计划类型变动。
+// Basic Plan 约比 Standard 低 10-15%，Escalating 起领低约 20% 但每年 +2%。
+const CPF_LIFE_ANCHORS: [number, number][] = [
+  [0, 0],
+  [170200, 950],
+  [330100, 1780],
+  [650100, 3440]
+]
+
 export function estimateCPFLIFE(raBalance: number): number {
-  // Rough formula: ~$720-790/month per $100k in RA at 65
-  const per100k = 750
-  return Math.round((raBalance / 100000) * per100k)
+  if (raBalance <= 0) return 0
+  const pts = CPF_LIFE_ANCHORS
+  const [lastX, lastY] = pts[pts.length - 1]
+
+  // 超出 ERS 档：按最后一段斜率外推
+  if (raBalance >= lastX) {
+    const [prevX, prevY] = pts[pts.length - 2]
+    return Math.round(prevY + (raBalance - prevX) * (lastY - prevY) / (lastX - prevX))
+  }
+
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1]
+    const [x1, y1] = pts[i]
+    if (raBalance <= x1) {
+      return Math.round(y0 + (raBalance - x0) * (y1 - y0) / (x1 - x0))
+    }
+  }
+  return 0
 }
 
 // Monthly salary ceiling for CPF contributions

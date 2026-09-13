@@ -60,9 +60,11 @@ export function calcCPF(input: CPFInput): CPFResult {
       ma = ma * (1 + CPF_INTEREST.ma) + cappedSalary * band.ma * 12
     }
 
-    // At exactly age 55: transfer SA balance → RA
+    // At exactly age 55: SA closes, its balance transfers into RA.
+    // Must ADD to ra, not overwrite: the branch above already credited this
+    // year's RA-allocated contribution (band.sa) to ra.
     if (a === 55) {
-      ra = sa // SA moves to RA at 55
+      ra = ra + sa
       sa = 0
     }
   }
